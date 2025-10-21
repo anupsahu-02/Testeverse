@@ -1,0 +1,14 @@
+.form-div {
+    margin: auto;
+    margin-top: 20px;
+    width: 40vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.from-state-div {
+    display: flex;
+    justify-content: center;
+    /* flex-direction: column; */
+}

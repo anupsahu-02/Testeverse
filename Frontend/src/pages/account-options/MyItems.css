@@ -1,0 +1,21 @@
+.MyItemsComponent-component {
+    height: 100vh;
+    width: 75vw;
+    background-color: rgb(244, 242, 239);
+    padding: 20px;
+}
+
+.item-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    overflow-y: auto;
+    padding-bottom: 100px;
+}
+
+.item-card::-webkit-scrollbar {
+    display: none;
+}

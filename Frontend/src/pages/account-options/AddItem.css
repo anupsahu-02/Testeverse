@@ -1,0 +1,10 @@
+.AddItemComponent-container {
+    height: 100vh;
+    width: 75vw;
+    background-color: rgb(244, 242, 239);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+}
+

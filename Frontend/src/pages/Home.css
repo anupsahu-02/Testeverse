@@ -1,0 +1,14 @@
+.Home-Container {
+    height: 90vh;
+    width: 100vw;
+    background-color: #f5f7f8;
+}
+
+.product-container {
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+    background-color: #f5f7f8;
+    padding: 20px 10%;
+    overflow: auto;
+}

@@ -1,0 +1,9 @@
+.ProfileComponent-container {
+    height: 100%;
+    width: 75vw;
+    background-color: rgb(244, 242, 239);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 20px 10px;
+}
