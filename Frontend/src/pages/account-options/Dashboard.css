@@ -1,0 +1,30 @@
+.Dashboard {
+    position: relative;
+    display: flex;
+    height: 100%;
+    width: 75vw;
+    background-color: rgb(244, 242, 239);
+}
+
+.orders {
+    height: 100vh;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    overflow-y : auto;
+    overflow-x: hidden;
+    padding-bottom: 50px;
+    border-right: 1px  solid rgb(212, 231, 139);
+}
+
+.Dashboard .order-details {
+    height: 100%;
+    width: 60%;
+    background-color: white;
+    padding: 10px;
+}
+
+.Dashboard .order-details .details-box {
+    display: flex;
+    gap: 50px;
+}

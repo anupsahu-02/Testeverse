@@ -118,18 +118,18 @@ function MyItemsComponent() {
                                 title="green iguana"
                             />
                             <CardContent>
+                                <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: "end"}}>
+                                    {product.id}
+                                </Typography>
                                 <Typography gutterBottom variant="p" component="p">
                                     <b>{product.name}</b>
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-
                                 </Typography>
                                 <Typography variant="p" component="p" mt="1px" sx={{ color: 'text.secondary' }}>
                                     &#8377; {product.price}
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button onClick={handleDeleteButton} size="small">Update</Button>
+                                <Button  size="small">Update</Button>
                                 <React.Fragment>
                                     <Button size='small' onClick={handleClickOpen}>
                                         Delete
@@ -140,7 +140,7 @@ function MyItemsComponent() {
                                         aria-labelledby="alert-dialog-title"
                                         aria-describedby="alert-dialog-description"
                                     >
-                                        <DialogTitle>
+                                        <DialogTitle style={{width: "400px"}}>
                                             Do You Want to Delete?                           
                                         </DialogTitle>
                                         <DialogActions>

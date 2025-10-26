@@ -1,5 +1,6 @@
 package net.testeverse.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mongodb.lang.NonNull;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -7,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,11 +39,16 @@ public class User {
 
     private HashSet<String> address = new HashSet<>();
 
+    private boolean seller;
+
+    @DBRef
+    private Restaurant restaurant;
+
     @DBRef
     private List<Product> products = new ArrayList<>();
 
     @DBRef
-    private Product cart;
+    private HashMap<String, Product> carts = new HashMap<>();
 
     @DBRef
     private List<Order> orders = new ArrayList<>();

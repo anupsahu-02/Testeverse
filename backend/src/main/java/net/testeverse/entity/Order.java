@@ -1,5 +1,6 @@
 package net.testeverse.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,9 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Document(collection = "orders")
@@ -23,18 +26,24 @@ public class Order {
 
     private String productId;
 
-    private Date date;
+    private LocalDateTime orderedAt;
+
+    private LocalDateTime deliveredAt;
 
     private String name;
 
-    private boolean isDeliverd;
+    private String status = "PENDING";
 
-    private double deliveryCharge;
-
-    private double price;
+    private double totalAmount;
 
     private String imageUrl;
 
     private String address;
 
+    @DocumentReference(lazy = true)
+    @DBRef
+    private User customer;
+
+    @DBRef
+    private Restaurant restaurant;
 }

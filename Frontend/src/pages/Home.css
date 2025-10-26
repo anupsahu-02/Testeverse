@@ -2,6 +2,9 @@
     height: 90vh;
     width: 100vw;
     background-color: #f5f7f8;
+    display: flex;
+    justify-content: center;
+    padding-left: 100px;
 }
 
 .product-container {

@@ -88,13 +88,6 @@ public class PublicController {
 
     @GetMapping("/all-products")
     public ResponseEntity<List<Product>> getAllProducts() {
-
-        try {
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
         List<Product> products = productService.getAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }

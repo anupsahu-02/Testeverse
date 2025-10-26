@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -32,5 +34,12 @@ public class OrderController {
     public List<Order> getOrders() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return orderService.getOrders(username);
+    }
+
+    @PutMapping()
+    public Order changeStatusDelivered(@RequestBody Order order) {
+        order.setStatus("DELIVERED");
+        order.setDeliveredAt(LocalDateTime.now());
+        return orderService.save(order);
     }
 }

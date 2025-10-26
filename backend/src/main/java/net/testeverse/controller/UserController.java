@@ -72,4 +72,12 @@ public class UserController {
         userService.saveUser(user);
         return new ResponseEntity<>(user.getAddress(), HttpStatus.OK);
     }
+
+    @GetMapping("/isSeller")
+    public boolean isSeller() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.getUser(username);
+        return user.isSeller();
+    }
 }

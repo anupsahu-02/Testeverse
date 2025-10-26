@@ -15,6 +15,9 @@ import Auth from './pages/Auth'
 
 import UserProvider from './contexts/UserContext'
 
+import SellerConfigForm from './pages/account-options/SellerConfigForm'
+import Dashboard from './pages/account-options/Dashboard'
+
 function App() {
 
   return (
@@ -31,6 +34,8 @@ function App() {
                           <Route path='/account/my-address' element={<MyAddress />} />
                           <Route path='/account/my-items' element={<MyItems />} />
                           <Route path='/account/add-item' element={<AddItemComponent />} />
+                          <Route path='/account/dashboard' element={<Dashboard />} />
+                          <Route path='/account/seller-config-form' element={<SellerConfigForm />} />
                       </Route>
                 </Routes>
             </UserProvider >

@@ -17,6 +17,8 @@ function Navbar() {
 
     let isLoginPage = currentUrl.indexOf("/login");
     let isSignupPage = currentUrl.indexOf("/signup");
+    let isCartPage = currentUrl.indexOf("/my-cart");
+    let isAccountPage = currentUrl.indexOf("/account");
 
     let router = useNavigate();
 
@@ -61,13 +63,25 @@ function Navbar() {
                         {isLogin ?
 
                             <>
-                                <IconButton onClick={(() => router("/my-cart"))}>
-                                    <ShoppingCartIcon />
-                                </IconButton>
+                                {isCartPage === -1 ? 
+                                    <IconButton onClick={(() => router("/my-cart"))}>
+                                        <ShoppingCartIcon />
+                                    </IconButton> 
+                                : <>
+                                    <IconButton disabled onClick={(() => router("/my-cart"))}>
+                                        <ShoppingCartIcon />
+                                    </IconButton> 
+                                </>}
 
-                                <IconButton onClick={(() => router("/account/profile"))}>
-                                    <AccountCircleIcon />
-                                </IconButton>
+                                {isAccountPage === -1 ? 
+                                    <IconButton onClick={(() => router("/account/profile"))}>
+                                        <AccountCircleIcon />
+                                    </IconButton>
+                                : <> 
+                                    <IconButton disabled onClick={(() => router("/account/profile"))}>
+                                        <AccountCircleIcon />
+                                    </IconButton>
+                                </>}
                             </>
                             
                             :

@@ -9,5 +9,6 @@ public interface ProductRepository extends MongoRepository<Product, ObjectId> {
 
     void findAndDeleteByPublicId(String publicId);
 
+    Product findById(String productId);
 }
 

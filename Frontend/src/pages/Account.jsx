@@ -6,6 +6,9 @@ import WithAuth from '../utils/withAuth';
 import Navbar from '../Navbar';
 import { Link, Outlet, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react";
+import axios from 'axios';
+
+import Snackbar from '@mui/material/Snackbar';
 
 
 function Account() {
@@ -13,9 +16,36 @@ function Account() {
     let [isSeller, setIsSeller] = useState(false);
     let [activeComponent, setActiveComponet] = useState();
 
+    let [open, setOpen] = useState(false);
+    let [message, setMassage] = useState("");
+
     let router = useNavigate();
 
+    let seller = async() => {
+        try {
+            let response = await axios.get("http://localhost:8080/users/isSeller", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            setIsSeller(response.data);
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    let showMessage = (message) => {
+        setOpen(true);
+        setMassage(message);
+
+        setTimeout(() => {
+            setOpen(false);
+            setMassage("");
+        }, 5000)
+    }
+
     useEffect(() => {
+        seller();
         setActiveComponet("profile");
         router("/account/profile");
     }, [])
@@ -44,8 +74,11 @@ function Account() {
                     </div>
                     {isSeller ? 
                     <>
-                            <span>Product Configurations </span>
-                            <br />
+                        <br />
+                        <p style={{ color: activeComponent == "dashboard" ? "black" : "blue" }} onClick={(() => {
+                            setActiveComponet("dashboard");
+                            router("/account/dashboard");
+                        })}>Dashboard</p>
                         <p style={{ color: activeComponent == "add-item" ? "black" : "blue" }} onClick={(() => {
                             setActiveComponet("add-item");
                             router("/account/add-item");
@@ -56,19 +89,22 @@ function Account() {
                         })}>My Items</p>
                     </>
                     : 
-                        <p style={{ color: activeComponent == "seller-register" ? "black" : "blue" }} onClick={(() => {
-                            // setActiveComponet("seller-register");
-                            // router("/account/seller-register");
-                            setIsSeller(true);
-                        })}>Sell on Testeverse</p>
-
+                        <p style={{ color: activeComponent == "seller-config-form" ? "black" : "blue" }} onClick={() => {
+                            setActiveComponet("seller-config-form");
+                            router("/account/seller-config-form");
+                        }}>Become a Seller</p>
                     }
 
                 </div>
                 <div className="active-component">
-                    <Outlet />
+                    <Outlet context={{ seller, showMessage }} />
                 </div>
             </div>
+            <Snackbar
+                autoHideDuration={2}
+                open={open}
+                message={message}
+            />
         </div>
     </>
 }

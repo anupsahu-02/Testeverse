@@ -94,7 +94,6 @@ function Home() {
         try {
             let res = await axios.get("http://localhost:8080/public/all-products");
             setData(() => {
-                console.log(res.data);
                 return [...res.data]
             });
             setIsLoading(false);
@@ -171,7 +170,7 @@ function Home() {
                 {
                     name: product.name,
                     productId: product.id,
-                    price: product.price,
+                    totalAmount: product.price,
                     imageUrl: product.imageUrl,
                     address: address
                 },
@@ -201,7 +200,6 @@ function Home() {
                                     <CardMedia
                                         sx={{ maxHeight: 250, minHeight: 200 }}
                                         image={selectedProduct.imageUrl}
-                                        title="green iguana"
                                     />
                                     <CardContent>
                                         <Typography gutterBottom variant="p" component="p">
@@ -283,19 +281,21 @@ function Home() {
                     : <></>}
                 {data.length > 0 ?
                     data.map((product, idx) =>
-                        <Card key={idx} sx={{ minWidth: 390, maxWidth: 350 }}>
+                        <Card key={idx} sx={{ minWidth: 350, maxWidth: 350 }}>
                             <CardMedia
-                                sx={{ maxHeight: 300, minHeight: 250 }}
+                                sx={{ maxHeight: 200, minHeight: 200 }}
                                 image={product.imageUrl}
-                                title="green iguana"
                             />
                             <CardContent>
-                                <Typography gutterBottom variant="p" component="p">
-                                    <b>{product.name}</b>
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                </Typography>
-                                <Typography variant="p" component="p" mt="1px" sx={{ color: 'text.secondary' }}>
+                                <div style={{display: "flex", justifyContent: "space-between"}}>
+                                    <Typography gutterBottom variant="p" component="p">
+                                        <b>{product.name}</b>
+                                    </Typography>
+                                    <Typography sx={{ textAlign: "end" }}>
+                                        {product.restaurant.restaurant_name}
+                                    </Typography>
+                                </div>
+                                <Typography variant="p" component="p" mt="1px" sx={{ color: 'text.secondary', p:"0" }}>
                                     &#8377; {product.price}
                                 </Typography>
                             </CardContent>

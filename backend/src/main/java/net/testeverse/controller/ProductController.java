@@ -15,7 +15,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.event.HyperlinkEvent;
+import java.awt.color.ProfileDataException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/products")
@@ -61,9 +64,16 @@ public class ProductController {
     }
 
     @GetMapping("/my-cart")
-    public Product getCartItem() {
+    public List<Product> getCartItem() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUser(username);
-        return user.getCart();
+        return new ArrayList<>(user.getCarts().values());
+    }
+
+    @DeleteMapping("/my-cart/remove/{id}")
+    public ResponseEntity<?> removeItemFromCart(@PathVariable String id) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        productService.removeFromCart(id, username);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,11 +1,10 @@
 package net.testeverse.service;
 
 import net.testeverse.entity.Order;
-import net.testeverse.entity.Product;
 import net.testeverse.entity.Restaurant;
 import net.testeverse.entity.User;
 import net.testeverse.repository.OrderRepository;
-import net.testeverse.repository.ProductRepository;
+import net.testeverse.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,41 +12,38 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 @Service
-public class OrderService {
+public class RestaurantService {
 
     @Autowired
-    private OrderRepository orderRepository;
+    private RestaurantRepository restaurantRepository;
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private ProductRepository productRepository;
+    private OrderRepository orderRepository;
 
-    public void saveNewOrder(Order order, String username) {
-        User user = userService.getUser(username);
-        String productId = order.getProductId();
-        Product product = productRepository.findById(productId);
-        order.setOrderedAt(LocalDateTime.now());
-        order.setCustomer(user);
-        order.setRestaurant(product.getRestaurant());
-        Order savedOrder = orderRepository.save(order);
-        user.getOrders().add(savedOrder);
-        userService.saveUser(user);
-    }
-
-    public Order save(Order order) {
-        Order savedOrder = orderRepository.save(order);
-        return savedOrder;
+    public boolean addNewRestaurant(Restaurant restaurant, String username) {
+        try {
+            User user = userService.getUser(username);
+            restaurant.setOwner(user);
+            Restaurant saved = restaurantRepository.save(restaurant);
+            user.setRestaurant(saved);
+            user.setSeller(true);
+            userService.saveUser(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public List<Order> getOrders(String username) {
         User user = userService.getUser(username);
-        List<Order> orders = user.getOrders();
+        String restaurantId = user.getRestaurant().getId();
+        List<Order> orders = orderRepository.findByRestaurant(restaurantId);
 
         List<Order> pendingOrders = new ArrayList<>();
         List<Order> deliveredOrders = new ArrayList<>();
@@ -65,5 +61,4 @@ public class OrderService {
         finalOrders.addAll(deliveredOrders);
         return finalOrders;
     }
-
 }

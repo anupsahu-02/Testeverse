@@ -1,9 +1,18 @@
-.ShoppingCart-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
+.ShoppingCart-container  {
     height: 100vh;
     width: 100vw;
+    background-color: rgb(244, 242, 239);
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.items-box {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    height: 100%;
+    width: 90%;
     padding-top: 50px;
     background-color: rgb(244, 242, 239);
 }

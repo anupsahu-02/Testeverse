@@ -10,7 +10,9 @@ import net.testeverse.repository.ProductRepository;
 import net.testeverse.repository.ProductRepositoryImpl;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -39,16 +41,15 @@ public class ProductService {
     public boolean saveProduct(ProductRequest productRequest, String username) {
         try {
             Map uploadResult = cloudinaryService.uploadImage(productRequest.getImage());
-
+            User user = userService.getUser(username);
             String imageUrl = uploadResult.get("url").toString();
             String publicId = uploadResult.get("public_id").toString();
             Product product = Product.builder().name(productRequest.getName()).price(productRequest.getPrice()).
                     imageUrl(imageUrl).publicId(publicId).build();
-
+            product.setRestaurant(user.getRestaurant());
             Product savedProduct = productRepository.save(product);
 
             if(savedProduct.getId() != null) {
-                User user = userService.getUser(username);
                 user.getProducts().add(savedProduct);
 
                 return userService.saveUser(user);
@@ -88,11 +89,18 @@ public class ProductService {
         try {
             Product product = productRepositoryImpl.getProductById(id);
             User user = userService.getUser(username);
-            user.setCart(product);
+            user.getCarts().put(product.getId(), product);
             userService.saveUser(user);
             return true;
         } catch (Exception e) {
             return false;
         }
+    }
+
+
+    public void removeFromCart(String productId, String username) {
+        User user = userService.getUser(username);
+        user.getCarts().remove(productId);
+        userService.saveUser(user);
     }
 }
