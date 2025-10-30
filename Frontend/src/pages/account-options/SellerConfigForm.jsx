@@ -28,7 +28,7 @@ function SellerConfigForm() {
 
     let router = useNavigate();
 
-    let { seller, showMessage } = useOutletContext();
+    let { seller, showMessage, setRestaurant } = useOutletContext();
 
     let handleSubmitButton = async (e) => {
         e.preventDefault();
@@ -46,7 +46,7 @@ function SellerConfigForm() {
                 }
             }) 
             await seller();
-            showMessage(response.data)
+            showMessage(response.data, restaurant_name);
             setLoading(false);
             setOpen(true);
             setTimeout(() => {

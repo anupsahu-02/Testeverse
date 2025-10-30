@@ -19,6 +19,8 @@ function Account() {
     let [open, setOpen] = useState(false);
     let [message, setMassage] = useState("");
 
+    let [restaurant, setRestaurant] = useState("");
+
     let router = useNavigate();
 
     let seller = async() => {
@@ -34,10 +36,10 @@ function Account() {
         }
     }
 
-    let showMessage = (message) => {
+    let showMessage = (message, res_name) => {
         setOpen(true);
         setMassage(message);
-
+        setRestaurant(res_name);
         setTimeout(() => {
             setOpen(false);
             setMassage("");
@@ -73,7 +75,8 @@ function Account() {
 
                     </div>
                     {isSeller ? 
-                    <>
+                    <>  
+                        <span style={{fontFamily: "cursive", color: "rebeccapurple", fontSize: "large"}}>{restaurant}</span>
                         <br />
                         <p style={{ color: activeComponent == "dashboard" ? "black" : "blue" }} onClick={(() => {
                             setActiveComponet("dashboard");
@@ -97,7 +100,7 @@ function Account() {
 
                 </div>
                 <div className="active-component">
-                    <Outlet context={{ seller, showMessage }} />
+                    <Outlet context={{ seller, showMessage, setRestaurant }} />
                 </div>
             </div>
             <Snackbar

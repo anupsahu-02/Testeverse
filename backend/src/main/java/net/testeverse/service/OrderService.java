@@ -2,7 +2,6 @@ package net.testeverse.service;
 
 import net.testeverse.entity.Order;
 import net.testeverse.entity.Product;
-import net.testeverse.entity.Restaurant;
 import net.testeverse.entity.User;
 import net.testeverse.repository.OrderRepository;
 import net.testeverse.repository.ProductRepository;

@@ -110,6 +110,7 @@ function ShoppingCart() {
         }
 
     let handleOrderPlace = async (product) => {
+        if (address.length <= 0) return;
         try {
             let res = axios.post("http://localhost:8080/users/orders/add-order",
                 {
@@ -162,6 +163,7 @@ function ShoppingCart() {
                                                     value={address}
                                                     label="Address"
                                                     type="text"
+                                                    required
                                                     onChange={(e) => setAddress(e.target.value)}
                                                 >
                                                     {addresses.map((add, idx) =>
@@ -228,7 +230,6 @@ function ShoppingCart() {
     return <>
         <Navbar />
         <div className="ShoppingCart-container">
-            <h3>My Cart</h3>
             <div className="items-box">
                 {isLoading ? <h1>Loading</h1>
                     : products.length > 0 ?

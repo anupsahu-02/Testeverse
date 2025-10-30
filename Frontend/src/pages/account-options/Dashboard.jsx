@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import './Dashboard.css'
 import axios from 'axios';
 
+import empty_cart_img from '../../assets/undraw_empty-cart_574u.png'
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -54,7 +56,6 @@ function Dashboard() {
             setOrders(() => {
                 return [...res.data]
             })
-
             if(res.data.length > 0) {
                 setOrderDetails(() => {
                     return { ...res.data[0] }
@@ -68,12 +69,13 @@ function Dashboard() {
 
     let handleCheckConform = async() => {
         try {
-            let res = await axios.put("http://localhost:8080/users/orders", orderDetails, {
+            let res = await axios.put(`http://localhost:8080/users/orders/${orderDetails.id}/deliver`, null, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             })
         
+            console.log(res)
             let filtered = orders.filter((order) => order.id !== orderDetails.id);  
             filtered.unshift({...res.data}) 
             setOrders(filtered);
@@ -126,73 +128,79 @@ function Dashboard() {
 
     return (
         <div className="Dashboard">
-            <div className='orders'>
-                {orders ?
-                    orders.map((order) =>
-                        <Card onClick={() => handleCardClick(order)} style={{ width: "90%", minHeight: "80px", maxHeight: "80px", margin: "15px 15px", cursor: "pointer",  backgroundColor : orderDetails.id == order.id ? "orange" : ""}} >
-                            <CardContent style={{ display: "flex", gap: "10px" }}>
-                                <CardMedia
-                                    sx={{ maxHeight: 50, minHeight: 50, minWidth: "100px", maxWidth: "250px" }}
-                                    image={order.imageUrl}
-                                    title="imgage"
-                                />
-                                <Typography>
-                                    <b style={{ fontSize: "larger", opacity: "0.7" }}>{order.name}</b>
-                                    <p>&#8377;{order.totalAmount}</p>
-                                </Typography>
-                                <Typography style={{height: "100%", width: "100%", display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "end"}}>
+            {orders && orders.length < 1 ?
+                <img style={{width: "60%", height: "60vh", margin: "auto", marginTop: "100px"}} src={empty_cart_img} />
+            : <>
+                    <div className='orders'>
+                        {orders && orders.length > 0 ?
+                            orders.map((order) =>
+                                <Card onClick={() => handleCardClick(order)} style={{ width: "90%", minHeight: "80px", maxHeight: "80px", margin: "15px 15px", cursor: "pointer", backgroundColor: orderDetails.id == order.id ? "orange" : "" }} >
+                                    <CardContent style={{ display: "flex", gap: "10px" }}>
+                                        <CardMedia
+                                            sx={{ maxHeight: 50, minHeight: 50, minWidth: "100px", maxWidth: "250px" }}
+                                            image={order.imageUrl}
+                                            title="imgage"
+                                        />
+                                        <div style={{ width: "250px", height: "10px" }}>
+                                            <p style={{ fontSize: "17px", opacity: "0.7", }}> <b>{order.name}</b> </p>
+                                        </div>
+                                        <Typography style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "end" }}>
+                                            <div>
+                                                <p> {order.status}</p>
+                                            </div>
+                                            <div>
+                                                <p style={{ fontSize: "small" }}>Ordered At : {order.orderedAt.slice(0, 10)} <span>{order.orderedAt.slice(11, 16)}</span></p>
+                                            </div>
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            )
+                            : <>
+                            </>}
+                    </div>
+                    <div className='order-details'>
+                        {orderDetails != null && orderDetails != undefined ?
+                            <>
+                                <h4>Order Details</h4>
+                                <hr />
+                                <div className='details-box'>
                                     <div>
-                                        <p> {order.status}</p>
+                                        <p style={{ fontSize: "large" }}>Customer</p>
+                                        <p> Name: {orderDetails.customer.username} </p>
+                                        <p> Address : {orderDetails.address} </p>
                                     </div>
                                     <div>
-                                        <p style={{ fontSize: "small" }}>Ordered At : {order.orderedAt.slice(0, 10)} <span>{order.orderedAt.slice(11, 16)}</span></p>
+                                        <p style={{ fontSize: "large" }}>Item</p>
+                                        Code : {orderDetails.productId} <br />
+                                        Name : {orderDetails.name} <br />
+                                        Total Amount : {orderDetails.totalAmount} <br />
                                     </div>
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    )
-                    : <></>}
-            </div>
-            <div className='order-details'>
-                {orderDetails != null && orderDetails != undefined ? 
-                    <>
-                        <h4>Order Details</h4>
-                        <hr />
-                        <div className='details-box'>
-                            <div>
-                                <p style={{ fontSize: "large" }}>Customer</p>
-                                <p>Name: {orderDetails.customer.username}</p>
-                                <p>Address : {orderDetails.address}</p>
-                                <p>Ordered At : {orderDetails.orderedAt.slice(0, 10)} <span>{orderDetails.orderedAt.slice(11, 16)}</span></p>
-                            </div>
-                            <div>
-                                <p style={{fontSize: "large"}}>Item</p>
-                                <p>Code : {orderDetails.productId}</p>
-                                <p>Name : {orderDetails.name}</p>
-                                <p>Total Amount : {orderDetails.totalAmount}</p>
-                            </div>
-                        </div>
-                            {orderDetails.status !== "DELIVERED" ? 
-                                <div>
-                                    <h5>Mark as Deliverd</h5>
-                                    <ToggleButton style={{ marginLeft: "20px" }}
-                                        value="check"
-                                        selected={deliverd}
-                                        onClick={handleClickOpen}
-                                    >
-                                        <CheckIcon />
-                                    </ToggleButton>
                                 </div>
-                            : <></>}
-                        <div style={{ borderTop: "1px solid green", paddingTop: "3px", marginTop: "5px" }}>
-                            <LocationMap locationName={place} />
-                        </div>
-                        <div>
-                        </div>
-                    </>
-                : <></>}
-                {open ? handleCheck() : <></>}
-            </div>
+                                <span> Ordered At : {orderDetails.orderedAt.slice(0, 10)} <span>{orderDetails.orderedAt.slice(11, 16)} </span>
+                                    |  Delivered At: {orderDetails.deliveredAt ? orderDetails.deliveredAt.slice(0, 10) : "PENDING"} <span> {orderDetails.deliveredAt ? orderDetails.deliveredAt.slice(11, 16) :"" }</span></span>
+                                {orderDetails.status !== "DELIVERED" ?
+                                    <div>
+                                        <h5>Mark as Deliverd</h5>
+                                        <ToggleButton style={{ marginLeft: "20px" }}
+                                            value="check"
+                                            selected={deliverd}
+                                            onClick={handleClickOpen}
+                                        >
+                                            <CheckIcon />
+                                        </ToggleButton>
+                                    </div>
+                                    : <></>}
+                                <div style={{ borderTop: "1px solid green", paddingTop: "3px", marginTop: "5px" }}>
+                                    <LocationMap locationName={place} />
+                                </div>
+                                <div>
+                                </div>
+                            </>
+                            : <>
+                            </>}
+                        {open ? handleCheck() : <></>}
+                    </div>
+            </>}
         </div>
     )
 }

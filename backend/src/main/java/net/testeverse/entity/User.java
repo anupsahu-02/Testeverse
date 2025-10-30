@@ -50,6 +50,7 @@ public class User {
     @DBRef
     private HashMap<String, Product> carts = new HashMap<>();
 
+    @JsonIgnore
     @DBRef
     private List<Order> orders = new ArrayList<>();
 }

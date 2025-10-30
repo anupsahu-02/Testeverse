@@ -164,7 +164,7 @@ function Home() {
     }
 
     let handleOrderPlace = async(product) => {
-        console.log("Order being placed..")
+        if(address.length <= 0) return;
         try {
             let res = axios.post("http://localhost:8080/users/orders/add-order", 
                 {
@@ -217,6 +217,7 @@ function Home() {
                                                     value={address}
                                                     label="Address"
                                                     type="text"
+                                                    required
                                                     onChange={(e) => setAddress(e.target.value)}
                                                 >
                                                     {addresses.map((add, idx) => 
@@ -281,7 +282,7 @@ function Home() {
                     : <></>}
                 {data.length > 0 ?
                     data.map((product, idx) =>
-                        <Card key={idx} sx={{ minWidth: 350, maxWidth: 350 }}>
+                        <Card className="product-card" key={idx} sx={{ minWidth: 350, maxWidth: 350 }}>
                             <CardMedia
                                 sx={{ maxHeight: 200, minHeight: 200 }}
                                 image={product.imageUrl}

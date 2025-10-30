@@ -68,10 +68,10 @@ function OrdersComponent() {
                                                 image={order.imageUrl}
                                                 title="imgage"
                                             />
-                                            <Typography>
-                                                <b style={{ fontSize: "larger", opacity: "0.7" }}>{order.name}</b>
-                                                <p>&#8377;{order.totalAmount}</p>
-                                            </Typography>
+                                            
+                                            <div style={{width: "250px", height: "10px"}}>
+                                                <p style={{ fontSize: "17px", opacity: "0.7", }}> <b>{order.name}</b> </p>
+                                            </div>
                                             <Typography style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "end" }}>
                                                 <div>
                                                     <p> {order.status}</p>

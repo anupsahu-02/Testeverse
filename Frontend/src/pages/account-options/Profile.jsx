@@ -9,11 +9,14 @@ import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 
 function ProfileComponent() {
 
     let [user, setUser] = useState({username: "", password: "", email: ""});
     let router = useNavigate();
+
+    let { setRestaurant } = useOutletContext();
 
     useEffect(() => { 
         let getData = async() => {
@@ -24,11 +27,12 @@ function ProfileComponent() {
             });
 
             if (response.status === 200) {
-                console.log(response.data.username)
+                if (response.data.restaurant) setRestaurant(response.data.restaurant.restaurant_name);
                 setUser(() => {
                     return {username: response.data.username, password: response.data.password, email: response.data.email}
                 });
             }
+
         }
         getData();
     }, [])

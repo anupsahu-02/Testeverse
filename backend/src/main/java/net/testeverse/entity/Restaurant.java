@@ -32,5 +32,4 @@ public class Restaurant {
     @JsonIgnore
     @DBRef
     private User owner;
-
 }
