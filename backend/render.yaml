@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: testeverse-backend
+    env: java
+    rootDir: backend
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
