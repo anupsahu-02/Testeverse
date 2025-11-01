@@ -1,0 +1,18 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGO_DB_URL}
+      auto-index-creation: true
+
+  main:
+    allow:
+      circular-reference=true:
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
+
+app:
+  frontend:
+    url: ${APP_FRONTEND_URL}
