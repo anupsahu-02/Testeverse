@@ -24,5 +24,6 @@ RUN ./mvnw clean package -DskipTests
 # Expose port (same as your Spring Boot app)
 EXPOSE 8080
 
-# Run the jar file (using the robust sh -c command)
-CMD ["sh", "-c", "java -jar $(ls target/*.jar)"]
+# ... other steps ...
+# Run the jar file directly using ENTRYPOINT
+ENTRYPOINT ["java", "-jar", "target/testeverse-0.0.1-SNAPSHOT.jar"]
