@@ -1,12 +1,12 @@
 spring:
   data:
     mongodb:
-      uri: ${MONGO_DB_URL}
+      uri: ${MONGODB_URL}
       auto-index-creation: true
 
   main:
     allow:
-      circular-reference=true:
+      circular-reference: true
 
 cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME}
