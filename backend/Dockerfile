@@ -1,5 +1,5 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:17-jdk-slim
+# Use the correct OpenJDK 8 runtime as a parent image
+FROM openjdk:8-jdk-alpine
 
 # Set working directory inside container
 WORKDIR /app
@@ -21,8 +21,8 @@ COPY src ./src
 # Package the application
 RUN ./mvnw clean package -DskipTests
 
-# Expose port
+# Expose port (same as your Spring Boot app)
 EXPOSE 8080
 
-# Run the jar file
-CMD ["java", "-jar", "target/*.jar"]
+# Run the jar file (using the robust sh -c command)
+CMD ["sh", "-c", "java -jar $(ls target/*.jar)"]
