@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: testeverse-backend
+    env: docker
+    rootDir: backend
+    dockerfilePath: ./backend/Dockerfile
