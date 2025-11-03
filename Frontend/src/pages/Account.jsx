@@ -1,7 +1,7 @@
 
 import './Account.css'
 
-import WithAuth from '../utils/withAuth';
+import WithAuth from '../utils/WithAuth';
 
 import Navbar from '../Navbar';
 import { Link, Outlet, useNavigate } from "react-router-dom"

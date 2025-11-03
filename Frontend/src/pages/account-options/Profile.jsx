@@ -1,6 +1,6 @@
 import './Profile.css'
 
-import WithAuth from '../../utils/withAuth';
+import WithAuth from '../../utils/WithAuth';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
