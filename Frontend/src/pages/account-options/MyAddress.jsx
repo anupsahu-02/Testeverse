@@ -13,6 +13,12 @@ import Box from '@mui/material/Box';
 
 import axios from "axios";
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
+
 function MyAddress() {
 
     let [address, setAddress] = useState("");
@@ -33,7 +39,7 @@ function MyAddress() {
     let getAddresses = async () => {
         try {
             setLoading(true);
-            let res = await axios.get("http://localhost:8080/users/get-address", {
+            let res = await client.get("/users/get-address", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -80,7 +86,7 @@ function MyAddress() {
         
         try {
             setLoading(true);
-            let res = await axios.post("http://localhost:8080/users/add-address", 
+            let res = await client.post("/users/add-address", 
             {
                 address: address
             },
@@ -105,7 +111,7 @@ function MyAddress() {
     let handleAddAddressDelete = async(address) => {
         axios.post
         try {
-            let res = await axios.delete(`http://localhost:8080/users/delete-address/${address}`,
+            let res = await client.delete(`/users/delete-address/${address}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`

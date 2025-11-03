@@ -12,6 +12,12 @@ import axios, { HttpStatusCode } from 'axios';
 
 import Snackbar from '@mui/material/Snackbar';
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
+
 function AddItemComponent() {
 
 
@@ -38,7 +44,7 @@ function AddItemComponent() {
 
         try {
             setLoading(true);
-            let response = await axios.post("http://localhost:8080/products", formData, {
+            let response = await client.post("/products", formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }

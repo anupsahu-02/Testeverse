@@ -11,6 +11,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
+
 function ProfileComponent() {
 
     let [user, setUser] = useState({username: "", password: "", email: ""});
@@ -20,7 +26,7 @@ function ProfileComponent() {
 
     useEffect(() => { 
         let getData = async() => {
-            let response = await axios.get("http://localhost:8080/users", {
+            let response = await client.get("/users", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }

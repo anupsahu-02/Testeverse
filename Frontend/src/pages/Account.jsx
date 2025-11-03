@@ -10,6 +10,11 @@ import axios from 'axios';
 
 import Snackbar from '@mui/material/Snackbar';
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
 
 function Account() {
 
@@ -25,7 +30,7 @@ function Account() {
 
     let seller = async() => {
         try {
-            let response = await axios.get("http://localhost:8080/users/isSeller", {
+            let response = await client.get("/users/isSeller", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }

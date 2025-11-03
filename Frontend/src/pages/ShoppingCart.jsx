@@ -29,6 +29,12 @@ import Select from '@mui/material/Select';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
+
 
 function ShoppingCart() {
 
@@ -79,7 +85,7 @@ function ShoppingCart() {
     let getData = async () => {
         try {
             setIsLoading(true)
-            let response = await axios.get("http://localhost:8080/products/my-cart", {
+            let response = await client.get("/products/my-cart", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -96,7 +102,7 @@ function ShoppingCart() {
 
     let getAddress = async() => {
             try {
-                let res = await axios.get("http://localhost:8080/users/get-address", {
+                let res = await client.get("/users/get-address", {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`
                     }
@@ -112,7 +118,7 @@ function ShoppingCart() {
     let handleOrderPlace = async (product) => {
         if (address.length <= 0) return;
         try {
-            let res = axios.post("http://localhost:8080/users/orders/add-order",
+            let res = client.post("/users/orders/add-order",
                 {
                     name: product.name,
                     productId: product.id,
@@ -210,7 +216,7 @@ function ShoppingCart() {
 
     let handleRemoveBtn = async(product) => {
         try {
-            let res = axios.delete(`http://localhost:8080/products/my-cart/remove/${product.id}`, {
+            let res = client.delete(`/products/my-cart/remove/${product.id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }

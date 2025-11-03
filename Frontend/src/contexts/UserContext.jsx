@@ -4,8 +4,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 export const UserContext = createContext({});
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
 const client = axios.create({
-    baseURL: `http://localhost:8080`
+    baseURL: backendURL
 });
 
 function UserProvider({ children }) {

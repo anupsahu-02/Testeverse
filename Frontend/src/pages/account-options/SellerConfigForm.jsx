@@ -10,6 +10,12 @@ import { useState } from 'react';
 
 import axios, { HttpStatusCode } from 'axios';
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
+
 
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
@@ -34,7 +40,7 @@ function SellerConfigForm() {
         e.preventDefault();
         try {
             setLoading(true);
-            let response = await axios.post("http://localhost:8080/users/restaurant/config", {
+            let response = await client.post("/restaurant/config", {
                 restaurant_name: restaurant_name,
                 city: city,
                 address: address,

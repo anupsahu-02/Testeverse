@@ -13,6 +13,11 @@ import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
 
 function Auth() {
 
@@ -39,7 +44,7 @@ function Auth() {
         e.preventDefault();
         if(formState == 0) {
             setIsResponse(false);
-            await axios.post("http://localhost:8080/public/login", {
+            await client.post("/public/login", {
                 "username": username,
                 "password": password,
             }).then((response) => {
@@ -54,7 +59,7 @@ function Auth() {
 
         } else {
             setIsResponse(false);
-            await axios.post("http://localhost:8080/public/signup", {
+            await client.post("/public/signup", {
                 "username": username,
                 "password": password,
                 "email": email

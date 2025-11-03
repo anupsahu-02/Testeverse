@@ -11,6 +11,12 @@ import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
 import { Button } from '@mui/material';
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
+
 function OrdersComponent() {
 
     let [orders, setOrders] = useState([]);
@@ -22,7 +28,7 @@ function OrdersComponent() {
 
     let getOrders = async() => {
         try {
-            let res = await axios.get("http://localhost:8080/users/orders/get-orders",
+            let res = await client.get("/users/orders/get-orders",
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`

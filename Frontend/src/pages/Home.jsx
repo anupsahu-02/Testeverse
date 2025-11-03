@@ -63,9 +63,15 @@ function Home() {
         setAddress(event.target.value)
     };
 
+    const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+    const client = axios.create({
+        baseURL: backendURL
+    });
+
     let getAddress = async() => {
         try {
-            let res = await axios.get("http://localhost:8080/users/get-address", {
+            let res = await client.get("/users/get-address", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -92,7 +98,7 @@ function Home() {
 
     let getData = async() => {
         try {
-            let res = await axios.get("http://localhost:8080/public/all-products");
+            let res = await client.get("/public/all-products");
             setData(() => {
                 return [...res.data]
             });
@@ -111,7 +117,7 @@ function Home() {
         }
         
         try {
-            let res = await axios.post(`http://localhost:8080/products/add-to-cart/${product.id}`, null, {
+            let res = await client.post(`/products/add-to-cart/${product.id}`, null, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 },
@@ -166,7 +172,7 @@ function Home() {
     let handleOrderPlace = async(product) => {
         if(address.length <= 0) return;
         try {
-            let res = axios.post("http://localhost:8080/users/orders/add-order", 
+            let res = client.post("/users/orders/add-order", 
                 {
                     name: product.name,
                     productId: product.id,

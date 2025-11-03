@@ -22,6 +22,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LocationMap from './LocationMap';
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
+
 function Dashboard() {
 
     let [orders, setOrders] = useState([]);
@@ -47,7 +53,7 @@ function Dashboard() {
 
     let getOrders = async() => {
         try {
-            let res = await axios.get("http://localhost:8080/users/restaurant/orders", {
+            let res = await client.get("/users/restaurant/orders", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -69,7 +75,7 @@ function Dashboard() {
 
     let handleCheckConform = async() => {
         try {
-            let res = await axios.put(`http://localhost:8080/users/orders/${orderDetails.id}/deliver`, null, {
+            let res = await client.put(`/users/orders/${orderDetails.id}/deliver`, null, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }

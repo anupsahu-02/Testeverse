@@ -22,6 +22,12 @@ import Stack from '@mui/material/Stack';
 
 import axios from 'axios';
 
+const backendURL = `${import.meta.env.VITE_API_URL}`;
+
+const client = axios.create({
+    baseURL: backendURL
+});
+
 function MyItemsComponent() {
 
     let [products, setProducts] = useState([]);
@@ -45,7 +51,7 @@ function MyItemsComponent() {
 
     let getProducts = async () => {
         try {
-            let response = await axios.get("http://localhost:8080/products/my-products", {
+            let response = await client.get("/products/my-products", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -67,7 +73,7 @@ function MyItemsComponent() {
         console.log("handleDeleteButton");
         
         try {
-            let response = await axios.delete(`http://localhost:8080/products/delete/${product.publicId}`, {
+            let response = await client.delete(`/products/delete/${product.publicId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
