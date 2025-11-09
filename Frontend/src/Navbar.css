@@ -69,7 +69,7 @@
     color: wheat;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) and (orientation: portrait) {
     .Nav-container {
         background-color: rgb(255, 255, 255);
         height: 100px;

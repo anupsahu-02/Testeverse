@@ -29,7 +29,7 @@
    border-top: 1px solid rgb(216, 203, 203);
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) and (orientation: portrait) {
     .ShoppingCart-container {
         padding: 0;
     }

@@ -29,7 +29,7 @@
     gap: 50px;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) and (orientation: portrait) {
     .orders {
         position: absolute;
         height: 100vh;

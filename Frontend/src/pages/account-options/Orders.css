@@ -49,7 +49,7 @@
     height: 10px;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) and (orientation: portrait) {
     .orders-box .user-orders {
         position: absolute;
         height: 100vh;

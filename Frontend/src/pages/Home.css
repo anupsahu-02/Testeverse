@@ -34,7 +34,7 @@
     background-color:#ffffffe6;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) and (orientation: portrait) {
     .Home-Container {
         padding: 0;
     }

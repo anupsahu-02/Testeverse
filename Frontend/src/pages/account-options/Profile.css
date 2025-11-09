@@ -9,7 +9,7 @@
     /* padding-top: 40px; */
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) and (orientation: portrait) {
     .ProfileComponent-container {
         height: 100vh;
         width: 100vw;
