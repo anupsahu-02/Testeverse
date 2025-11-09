@@ -67,7 +67,6 @@ function AddItemComponent() {
     }
 
     let handleFileChange = (e) => {
-        console.log("handleFileChange invoked.")
         setImage(e.target.files[0]);
     }
 
@@ -79,30 +78,30 @@ function AddItemComponent() {
                     open={open}
                     message={message}
                 />
-                <Card sx={{ minWidth:550, maxWidth: 550, minHeight: 500 , p: 5 }}>
+                <Card className='food-form-card'>
                     <h1 style={{marginBottom: "40px"}}>Yehh.. a new Food..</h1>
                     <form onSubmit={handleAddButton}>
                         <div class="mb-3">
-                            <label for="" class="form-label">Title</label>
+                            <label for="" class="form-label">Name</label>
                             <input
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 required={true}
-                                type="text" class="form-control form-control-lg" id="" placeholder="Food Title" />
+                                type="text" class="form-control form-control-lg inp" id="" placeholder="Food name" />
                         </div>
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Choose a picture for your food</label>
                             <input
                                 onChange={handleFileChange}
                                 required
-                                class="form-control form-control-lg" type="file" id="formFile" />
+                                class="form-control form-control-lg inp" type="file" id="formFile" />
                         </div>
                         <div >
                             <TextField
+                                className='price-inp inp'
                                 label="Price"
                                 id="outlined-start-adornment"
                                 type='number'
-                                sx={{ mb: 3, mt: 1, width: '55ch' }}
                                 fullWidth
                                 required
                                 value={price}

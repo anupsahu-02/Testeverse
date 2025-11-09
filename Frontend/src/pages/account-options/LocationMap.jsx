@@ -36,14 +36,13 @@ export default function LocationMap({ locationName }) {
     useEffect(() => {
         async function fetchCoords() {
             setLoading(true)
-            if(locationName.length > 0) {
-                console.log(locationName);
-            }
+            // if(locationName.length > 0) {
+            //     console.log(locationName);
+            // }
             try {
                 // Geocode from location name
                 const provider = new OpenStreetMapProvider();
                 const results = await provider.search({ query: locationName });
-                console.log(results);
                 if (results.length > 0) {
                     const lat = parseFloat(results[0].y);
                     const lon = parseFloat(results[0].x);

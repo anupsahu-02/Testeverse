@@ -23,3 +23,32 @@
 .Account-container {
   display: flex;
 }
+
+.drawer-open-icon {
+  display: none;
+}
+
+.drawer-open-box {
+  display: none;
+}
+
+@media (max-width: 400px) {
+  .AccountPanel {
+   display: none;
+  }
+  .drawer-open-box {
+    display: inline;
+    position: sticky;
+    top: 50px
+  }
+  .drawer-open-icon {
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    display: block;
+    background-color: white;
+    z-index: 10;
+  }
+  .drawer-box {
+    width: 70vw;
+  }
+}

@@ -10,5 +10,21 @@
 .from-state-div {
     display: flex;
     justify-content: center;
-    /* flex-direction: column; */
+}
+
+@media (max-width: 400px) {
+    .form-div {
+        margin: auto;
+        margin-top: 20px;
+        width: 100vw;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .lockOutIcon {
+        display: none;
+    }
+    .auth-inp {
+        padding: 0 !important;
+    }
 }

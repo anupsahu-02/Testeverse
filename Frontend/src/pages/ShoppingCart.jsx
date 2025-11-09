@@ -241,7 +241,7 @@ function ShoppingCart() {
                     : products.length > 0 ?
                         products.map((product, idx) =>
                             <div>
-                                <FoodCard>
+                                <FoodCard className="foodCard">
                                     <Box sx={{ position: "relative" }}>
                                         <CardMedia
                                             component="img"

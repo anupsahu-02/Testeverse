@@ -1,3 +1,4 @@
+import './MyAddress.css'
 import { useEffect, useState } from "react";
 import SatelliteMap from "../SatelliteMap";
 
@@ -66,9 +67,7 @@ function MyAddress() {
                     const res = await axios.get(
                         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
                     );
-                    console.log(res);
                     setAddress(res.data.display_name);
-                    console.log(address);
                 } catch {
                     console.log(e);
                 }
@@ -98,7 +97,6 @@ function MyAddress() {
 
             setLoading(false);
             setAddress("");
-            console.log(res);
         } catch(e) {
             setLoading(false);
             setError(e.response.data);
@@ -131,13 +129,13 @@ function MyAddress() {
     return ( 
         <div>
             <form onSubmit={handleAddAddress} >
-                <div style={{ display: "flex", flexDirection: "row", gap: "20px", margin: "20px" }}>
+                <div className="address-form-box">
                     <div>
                         <TextField
+                            className='address-form-inp'
                             label="Address"
                             id="outlined-start-adornment"
                             type='text'
-                            sx={{ mb: 3, mt: 1, width: '55ch' }}
                             fullWidth
                             required
                             value={address}
@@ -145,22 +143,25 @@ function MyAddress() {
                         />
                     </div>
 
-                    <div><Button onClick={getCurrentLocation} style={{ padding: "10px", marginTop: "13px" }} variant="outlined">Get Current Location</Button></div>
-                    <div>
-                        <Button type="submit" style={{ padding: "10px", marginTop: "13px" }} variant="contained">ADD</Button>
-                    </div>     
+                    <div className='address-form-btns'>
+                        <div><Button className='address-form-btn' onClick={getCurrentLocation} style={{ padding: "10px", marginTop: "13px" }} variant="outlined">Get Current Location</Button></div>
+                        <div>
+                            <Button className='address-form-btn' type="submit" style={{ padding: "10px", marginTop: "13px" }} variant="contained">ADD</Button>
+                        </div>      
+                    </div>   
                 </div>
                 <p style={{color: "red", marginLeft: "50px"}}>{error}</p> 
             </form>
             <div className="list-address">
-                <h3 style={{ padding: "15px" }}>My Addrees</h3>
+                <hr />
+                <h3>My Addrees</h3>
                {addresses && addresses.length > 0 ? 
                     addresses.map((address) => 
-                        <Card style={{ width: "72vw", margin: "15px 15px", display: "flex", padding: "5px", justifyContent: "space-between" }} >
+                        <Card className='list-address-card'>
                             <CardContent>
                                 {address}
                             </CardContent>
-                            <Button onClick={() => handleAddAddressDelete(address)} style={{paddingTop: "0"}} size="small" color="warning" variant="outlined">
+                            <Button className='list-address-card-btn' onClick={() => handleAddAddressDelete(address)} size="small" color="warning" variant="outlined">
                                 Delete
                             </Button>
                         </Card>

@@ -70,7 +70,6 @@ function MyItemsComponent() {
     }
 
     let handleDeleteButton = async(product) => {
-        console.log("handleDeleteButton");
         
         try {
             let response = await client.delete(`/products/delete/${product.publicId}`, {
@@ -78,7 +77,6 @@ function MyItemsComponent() {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             });
-            console.log("Product Deleted!");
             let filltered = products.filter((p) => p.publicId != product.publicId);
             setProducts(filltered);
             setOpen(false);
@@ -114,14 +112,13 @@ function MyItemsComponent() {
                     </Alert>
                 </Stack>
                 : <></>}
-            <div className='item-card'>
+            <div className='cards'>
                 {products.length > 0 ?
                     products.map((product, idx) =>
-                        <Card key={idx} sx={{ minWidth: 390, maxWidth: 350, maxHeight: 300}}>
+                        <Card className='cards-card' key={idx}>
                             <CardMedia
-                                sx={{ height: 150 }}
+                                className='cards-card-img'
                                 image={product.imageUrl}
-                                title="green iguana"
                             />
                             <CardContent>
                                 <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: "end"}}>
@@ -134,12 +131,14 @@ function MyItemsComponent() {
                                     &#8377; {product.price}
                                 </Typography>
                             </CardContent>
-                            <CardActions>
-                                <Button  size="small">Update</Button>
+                            <CardActions className='CardActions'>
+                                <Button size="small">Update</Button>
+                                <Button size='small' onClick={handleClickOpen}>
+                                    Delete
+                                </Button>
+                            </CardActions>
+                            
                                 <React.Fragment>
-                                    <Button size='small' onClick={handleClickOpen}>
-                                        Delete
-                                    </Button>
                                     <Dialog
                                         open={open}
                                         onClose={handleClose}
@@ -157,7 +156,6 @@ function MyItemsComponent() {
                                         </DialogActions>
                                     </Dialog>
                                 </React.Fragment>
-                            </CardActions>
                         </Card>
                     )
                     : <></>}

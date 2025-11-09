@@ -12,6 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
+import { minHeight } from "@mui/system";
 
 const backendURL = `${import.meta.env.VITE_API_URL}`;
 
@@ -110,6 +111,7 @@ function Auth() {
                 <form onSubmit={handleAuthButton}>
                     <div style={{ margin: "20px", width: "90%" }}>
                         <TextField
+                            className="auth-inp"
                             type="text"
                             name="username"
                             id="username"
@@ -123,6 +125,7 @@ function Auth() {
 
                     <div style={{ margin: "20px", width: "90%" }}>
                         <TextField
+                            className="auth-inp"
                             placeholder="Password"
                             id="password"
                             name="password"
@@ -137,6 +140,7 @@ function Auth() {
                     {formState == 1 ? (
                         <div style={{ margin: "20px", width: "90%" }}>
                             <TextField
+                                className="auth-inp"
                                 type="email"
                                 name="email"
                                 id="email"

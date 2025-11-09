@@ -10,6 +10,20 @@ import axios from 'axios';
 
 import Snackbar from '@mui/material/Snackbar';
 
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import MenuOpenRoundedIcon from '@mui/icons-material/MenuOpenRounded';
+
 const backendURL = `${import.meta.env.VITE_API_URL}`;
 
 const client = axios.create({
@@ -56,6 +70,58 @@ function Account() {
         setActiveComponet("profile");
         router("/account/profile");
     }, [])
+
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+    const toggleDrawer = (newOpen) => () => {
+        setDrawerOpen(newOpen);
+    };
+
+    const DrawerList = (
+        <Box className="drawer-box" role="presentation" onClick={toggleDrawer(false)}>
+            <List>
+                {['profile', 'orders', 'my-address'].map((text, index) => (
+                    <ListItem key={text} disablePadding>
+                        <ListItemButton onClick={() => {
+                            setActiveComponet({ text });
+                            router(`/account/${text}`);
+                        }}>
+                            <ListItemText primary={text} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+            <Divider />
+            {isSeller ? 
+                <List>
+                    <span style={{ fontFamily: "cursive", color: "rebeccapurple", fontSize: "medium", paddingLeft: "20px" }}>{restaurant}</span>
+                    {['dashboard', 'add-item', 'my-items'].map((text, index) => (
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton onClick={() => {
+                                setActiveComponet({ text });
+                                router(`/account/${text}`);
+                            }}>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
+            :
+                <List>
+                    {['Become a Seller'].map((text, index) => (
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton onClick={() => {
+                                setActiveComponet("seller-config-form");
+                                router("/account/seller-config-form");
+                            }}>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
+            }
+        </Box>
+    )
 
     return <>
         <div>
@@ -105,6 +171,14 @@ function Account() {
 
                 </div>
                 <div className="active-component">
+                    <div className="drawer-open-box">
+                        <Button className='drawer-open-icon' onClick={toggleDrawer(true)}><MenuOpenRoundedIcon /></Button>
+                        <Drawer open={drawerOpen} onClose={toggleDrawer(false)}>
+                            <div>
+                                {DrawerList}
+                            </div>
+                        </Drawer>
+                    </div>
                     <Outlet context={{ seller, showMessage, setRestaurant }} />
                 </div>
             </div>

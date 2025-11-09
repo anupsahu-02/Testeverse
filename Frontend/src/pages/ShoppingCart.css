@@ -28,3 +28,13 @@
 .order-btn  {
    border-top: 1px solid rgb(216, 203, 203);
 }
+
+@media (max-width: 400px) {
+    .ShoppingCart-container {
+        padding: 0;
+    }
+    .foodCard {
+        width: 310px !important;
+        margin-left: 5%;
+    }
+}

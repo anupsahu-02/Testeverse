@@ -4,7 +4,7 @@
     background-color: #fff;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 100;
     display: flex;
     align-items: center;
     box-shadow: 0 0 0 1px rgba(38, 38, 38, .1), 0 1px 8px 0 rgba(38, 38, 38, .1);
@@ -67,4 +67,35 @@
 
 .right-nav button:hover {
     color: wheat;
+}
+
+@media (max-width: 400px) {
+    .Nav-container {
+        background-color: rgb(255, 255, 255);
+        height: 100px;
+        flex-direction: column;
+        overflow-y: hidden;
+        padding: 0;
+        margin: 0;
+    }
+    .search-box {
+        position: absolute;
+        width: 100%;
+        padding: 10px;
+        top: 20px;
+    }
+    .left-nav {
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        right: 70%;
+        bottom: 25px;
+    }
+    .right-nav {
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        left: 60%;
+        bottom: 25px;
+    }
 }

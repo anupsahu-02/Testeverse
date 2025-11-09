@@ -28,3 +28,15 @@
     display: flex;
     gap: 50px;
 }
+
+@media (max-width: 400px) {
+    .orders {
+        position: absolute;
+        height: 100vh;
+        width: 100vw;
+        padding: 0 !important;
+    }
+    .order-details {
+        display: none;
+    }
+}

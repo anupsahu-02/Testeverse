@@ -35,7 +35,6 @@ function OrdersComponent() {
                     },
                 }
             )    
-            console.log(res)
             setOrders(() => {
                 return [...res.data]
             })
@@ -67,22 +66,21 @@ function OrdersComponent() {
                         <div className='user-orders'>
                             {orders ?
                                 orders.map((order) =>
-                                    <Card onClick={() => handleCardClick(order)} style={{ width: "90%", minHeight: "80px", maxHeight: "80px", margin: "15px 15px", cursor: "pointer", backgroundColor: orderDetails.id == order.id ? "orange" : "" }} >
-                                        <CardContent style={{ display: "flex", gap: "10px" }}>
+                                    <Card className='user-order-card' onClick={() => handleCardClick(order)} style={{cursor: "pointer", backgroundColor: orderDetails.id == order.id ? "orange" : "" }} >
+                                        <CardContent style={{ display: "flex", gap: "10px"}}>
                                             <CardMedia
-                                                sx={{ maxHeight: 50, minHeight: 50, minWidth: "100px", maxWidth: "250px" }}
+                                                className='user-order-card-img'
                                                 image={order.imageUrl}
-                                                title="imgage"
                                             />
                                             
-                                            <div style={{width: "250px", height: "10px"}}>
+                                            <div className='user-order-card-name'>
                                                 <p style={{ fontSize: "17px", opacity: "0.7", }}> <b>{order.name}</b> </p>
                                             </div>
                                             <Typography style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "end" }}>
-                                                <div>
+                                                <div className='user-order-card-status'>
                                                     <p> {order.status}</p>
                                                 </div>
-                                                <div>
+                                                <div className='user-order-card-date'>
                                                     <p style={{ fontSize: "small" }}>Ordered At : {order.orderedAt.slice(0, 10)} <span>{order.orderedAt.slice(11, 16)}</span></p>
                                                 </div>
                                             </Typography>

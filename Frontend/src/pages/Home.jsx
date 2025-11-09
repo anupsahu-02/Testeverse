@@ -110,7 +110,6 @@ function Home() {
 
     let handleAddToCart = async(product) => {
         if(!localStorage.getItem("token")) {
-            console.log("here")
             setIsAlert(true);
         } else {
             setIsAlert(false);
@@ -202,8 +201,8 @@ function Home() {
                             onClose={handleOrderClose}
                         >
                             <DialogContent>
-                                <Card sx={{ minWidth: 390, maxWidth: 350 }}>
-                                    <CardMedia
+                                <Card className="order-product-card">
+                                    <CardMedia className="order-product-card-media"
                                         sx={{ maxHeight: 250, minHeight: 200 }}
                                         image={selectedProduct.imageUrl}
                                     />
@@ -288,12 +287,12 @@ function Home() {
                     : <></>}
                 {data.length > 0 ?
                     data.map((product, idx) =>
-                        <Card className="product-card" key={idx} sx={{ minWidth: 350, maxWidth: 350 }}>
+                        <Card className="product-card" key={idx}>
                             <CardMedia
-                                sx={{ maxHeight: 200, minHeight: 200 }}
+                                className="product-card-img"
                                 image={product.imageUrl}
                             />
-                            <CardContent>
+                            <CardContent className="product-card-contend">
                                 <div style={{display: "flex", justifyContent: "space-between"}}>
                                     <Typography gutterBottom variant="p" component="p">
                                         <b>{product.name}</b>
