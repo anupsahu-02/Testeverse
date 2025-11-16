@@ -1,7 +1,7 @@
-# Use the correct OpenJDK 8 runtime as a parent image
-FROM openjdk:8-jdk-alpine
+# Use Temurin JDK 8 
+FROM eclipse-temurin:8-jdk
 
-# Set working directory inside container
+# Set working directory
 WORKDIR /app
 
 # Copy Maven wrapper and pom.xml
@@ -9,21 +9,20 @@ COPY mvnw ./
 COPY .mvn .mvn
 COPY pom.xml ./
 
-# Give permission for mvnw
+# Make mvnw executable
 RUN chmod +x mvnw
 
-# Download dependencies (faster build)
+# Download dependencies
 RUN ./mvnw dependency:go-offline
 
-# Copy the rest of your project
+# Copy the rest of the project
 COPY src ./src
 
-# Package the application
+# Build the application
 RUN ./mvnw clean package -DskipTests
 
-# Expose port (same as your Spring Boot app)
+# Expose port
 EXPOSE 8080
 
-# ... other steps ...
-# Run the jar file directly using ENTRYPOINT
+# Run the jar
 ENTRYPOINT ["java", "-jar", "target/testeverse-0.0.1-SNAPSHOT.jar"]
