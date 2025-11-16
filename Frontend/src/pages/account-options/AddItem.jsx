@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 
 import axios, { HttpStatusCode } from 'axios';
 
@@ -19,7 +20,7 @@ const client = axios.create({
 });
 
 function AddItemComponent() {
-
+    let { getUser, currUser, setAction } = useOutletContext();
 
     let [title, setTitle] = useState("");
     let [image, setImage] = useState(null);
@@ -44,6 +45,7 @@ function AddItemComponent() {
 
         try {
             setLoading(true);
+            setAction(true);
             let response = await client.post("/products", formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -51,17 +53,19 @@ function AddItemComponent() {
             }) 
             setLoading(false);
             setOpen(true);
+            setMassage(response.data);
+            setTitle("");
+            setPrice("");
+            await getUser();
             setTimeout(() => {
                 setOpen(false);
             }, 5000)
-            setMassage(response.data);
-            
-            setTitle("");
-            setPrice("");
         } catch(e) {
             console.log(e.response);
             setLoading(false);
             setError(e.response.data);
+        } finally {
+            setAction(false);
         }
 
     }

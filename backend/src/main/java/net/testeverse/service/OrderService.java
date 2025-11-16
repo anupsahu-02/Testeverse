@@ -32,7 +32,7 @@ public class OrderService {
         String productId = order.getProductId();
         Product product = productRepository.findById(productId);
         order.setOrderedAt(LocalDateTime.now());
-        order.setCustomer(user);
+        order.setCustomer_name(user.getUsername());
         order.setRestaurant(product.getRestaurant());
         Order savedOrder = orderRepository.save(order);
         user.getOrders().add(savedOrder);

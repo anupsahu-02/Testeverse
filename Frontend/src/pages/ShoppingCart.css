@@ -25,6 +25,12 @@
     justify-content: center;
 }
 
+.foodCard-img {
+    min-width:300px;
+    max-width:300px;
+    height: 250px;
+}
+
 .order-btn  {
    border-top: 1px solid rgb(216, 203, 203);
 }
@@ -32,9 +38,18 @@
 @media (max-width: 480px) and (orientation: portrait) {
     .ShoppingCart-container {
         padding: 0;
+        margin: 0;
+        padding-bottom: 20px;
     }
     .foodCard {
-        width: 310px !important;
-        margin-left: 5%;
+        width: 100% !important;
+        /* margin-left: 5%; */
     }
+    .foodCard-img {
+        min-width: 90vw;
+        max-width: 90vw;
+        height: 180px;
+        padding: 0;
+    }
+    
 }

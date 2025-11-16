@@ -49,6 +49,16 @@
     height: 10px;
 }
 
+.OrdersComponent-container img {
+    height: 350px;
+    margin: 90px 50px 50px 350px;
+}
+
+.OrdersComponent-container h4 {
+    text-align: center;
+    margin-left: 250px;
+}
+
 @media (max-width: 480px) and (orientation: portrait) {
     .orders-box .user-orders {
         position: absolute;
@@ -85,5 +95,13 @@
         padding: 0;
         margin: 0;
         font-size: 9px !important;
+    }
+    .OrdersComponent-container img {
+        height: 350px;
+        margin: 0;
+    }
+    .OrdersComponent-container h4 {
+        margin-left: 0 !important;
+        text-align: center;
     }
 }

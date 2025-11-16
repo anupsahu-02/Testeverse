@@ -1,13 +1,14 @@
 import './Profile.css'
 
 import WithAuth from '../../utils/WithAuth';
+import { UserContext } from '../../contexts/UserContext';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 
@@ -22,29 +23,22 @@ function ProfileComponent() {
     let [user, setUser] = useState({username: "", password: "", email: ""});
     let router = useNavigate();
 
-    let { setRestaurant } = useOutletContext();
+    let { setRestaurant, getUser, setAction } = useOutletContext();
+    let {currUser, setCurrUser} = useContext(UserContext);
 
-    useEffect(() => { 
-        let getData = async() => {
-            let response = await client.get("/users", {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
+    useEffect(() => {
+        if (currUser) {
+            setUser({
+                username: currUser.username,
+                password: currUser.password,
+                email: currUser.email
             });
-
-            if (response.status === 200) {
-                if (response.data.restaurant) setRestaurant(response.data.restaurant.restaurant_name);
-                setUser(() => {
-                    return {username: response.data.username, password: response.data.password, email: response.data.email}
-                });
-            }
-
         }
-        getData();
-    }, [])
+    }, [currUser]); // runs whenever currUser changes
 
     let handleSignOut = () => {
         localStorage.clear();
+        setCurrUser(null);
         router("/")
     }
 

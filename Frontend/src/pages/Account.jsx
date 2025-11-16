@@ -5,7 +5,7 @@ import WithAuth from '../utils/WithAuth';
 
 import Navbar from '../Navbar';
 import { Link, Outlet, useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from 'axios';
 
 import Snackbar from '@mui/material/Snackbar';
@@ -24,6 +24,9 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuOpenRoundedIcon from '@mui/icons-material/MenuOpenRounded';
 
+import LinearProgress from '@mui/material/LinearProgress';
+import { UserContext } from '../contexts/UserContext';
+
 const backendURL = `${import.meta.env.VITE_API_URL}`;
 
 const client = axios.create({
@@ -34,26 +37,44 @@ function Account() {
 
     let [isSeller, setIsSeller] = useState(false);
     let [activeComponent, setActiveComponet] = useState();
-
+    let [loading, setLoading] = useState(true);
     let [open, setOpen] = useState(false);
     let [message, setMassage] = useState("");
 
     let [restaurant, setRestaurant] = useState("");
 
+    let {currUser, setCurrUser} = useContext(UserContext);
+
     let router = useNavigate();
 
-    let seller = async() => {
-        try {
-            let response = await client.get("/users/isSeller", {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            });
-            setIsSeller(response.data);
-        } catch(e) {
-            console.log(e);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [progress, setProgress] = useState(0);
+    let [action, setAction] = useState(false);
+
+    useEffect(() => {
+        if(!currUser  || action) {
+            const timer = setInterval(() => {
+                setProgress((oldProgress) => {
+                    if (oldProgress === 100) {
+                        return 0;
+                    }
+                    const diff = Math.random() * 20;
+                    let np = Math.min(oldProgress + diff, 100);
+                    if (!loading) {
+                        setAction(false)
+                        return 100
+                    } else {
+                        if (np === 100) return 90;
+                    }
+                    return np;
+                });
+            }, 500);
+
+            return () => {
+                clearInterval(timer);
+            };
         }
-    }
+    }, []);
 
     let showMessage = (message, res_name) => {
         setOpen(true);
@@ -65,13 +86,48 @@ function Account() {
         }, 5000)
     }
 
-    useEffect(() => {
-        seller();
-        setActiveComponet("profile");
-        router("/account/profile");
-    }, [])
+    let getUser = async () => {
+        try {
+            setLoading(true);
+            let response = await client.get("/users", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            setCurrUser(response.data);
+            setIsSeller(response.data.seller);
+            if (response.data.seller) {
+                setRestaurant(response.data.restaurant.restaurant_name);
+            }
+            setLoading(false);
+            setProgress(0);
+        } catch(e) {
+            console.log(e);
+        }
+    }
 
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    useEffect(() => {
+        try {
+            if(!currUser && currUser == null) {
+                getUser();
+            } else {
+                setIsSeller(currUser.seller);
+                if (currUser.seller) {
+                    setRestaurant(currUser.restaurant.restaurant_name);
+                }
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }, [currUser])
+
+    useEffect(() => {
+        let currentUrl = window.location.href;
+        if (currentUrl.substring(currentUrl.indexOf("account")) === "account" && !loading) {
+            setActiveComponet("profile");
+            router(`/account/profile`);
+        } 
+    }, [loading])
 
     const toggleDrawer = (newOpen) => () => {
         setDrawerOpen(newOpen);
@@ -127,6 +183,12 @@ function Account() {
         <div>
             <Navbar />
             <div className="Account-container">
+                <div className='other-progress-bar'>
+                    {(loading && !currUser) || action ?
+                        <Box sx={{ width: '100vw', position: "absolute" }}>
+                            <LinearProgress variant="determinate" value={progress} />
+                        </Box> : <></>}
+                </div>
                 <div className="AccountPanel">
                     <h3 style={{ margin: "10px 0 20px 0" }}>Your Account</h3>
                     <p style={{ color: activeComponent == "profile" ? "black" : "blue" }} onClick={(() => {
@@ -172,14 +234,20 @@ function Account() {
                 </div>
                 <div className="active-component">
                     <div className="drawer-open-box">
-                        <Button className='drawer-open-icon' onClick={toggleDrawer(true)}><MenuOpenRoundedIcon /></Button>
+                        {(loading && !currUser) || action ?
+                            <Box sx={{ width: '100vw', position: "absolute" }}>
+                                <LinearProgress variant="determinate" value={progress} />
+                            </Box> : <></>}
+                        {!currUser ? <></> : <Button className='drawer-open-icon' onClick={toggleDrawer(true)}><MenuOpenRoundedIcon /></Button>}
                         <Drawer open={drawerOpen} onClose={toggleDrawer(false)}>
                             <div>
                                 {DrawerList}
                             </div>
                         </Drawer>
                     </div>
-                    <Outlet context={{ seller, showMessage, setRestaurant }} />
+                    <div className='phone-progress-bar'>
+                    </div>
+                    <Outlet context={{showMessage, setRestaurant, getUser, currUser, setAction }} />
                 </div>
             </div>
             <Snackbar

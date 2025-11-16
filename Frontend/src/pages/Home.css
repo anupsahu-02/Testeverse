@@ -41,10 +41,10 @@
     .product-container {
         padding: 20px 5%;
         gap: 20px;
+        width: 100vw;
     }
     .product-card {
-        min-width: 100%;
-        max-width: 100%;
+        min-width: 100% !important;
         height: 265px;
     }
     .product-card-img {

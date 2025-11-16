@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import axios, { HttpStatusCode } from 'axios';
 
@@ -35,12 +35,14 @@ function SellerConfigForm() {
     let router = useNavigate();
 
     let { seller, showMessage, setRestaurant } = useOutletContext();
+    let { getUser, setAction } = useOutletContext();
 
     let handleSubmitButton = async (e) => {
         e.preventDefault();
         try {
+            setAction(true);
             setLoading(true);
-            let response = await client.post("/restaurant/config", {
+            let response = await client.post("/users/restaurant/config", {
                 restaurant_name: restaurant_name,
                 city: city,
                 address: address,
@@ -51,24 +53,26 @@ function SellerConfigForm() {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             }) 
-            await seller();
+            await getUser();
             showMessage(response.data, restaurant_name);
-            setLoading(false);
             setOpen(true);
             setTimeout(() => {
                 setOpen(false);
             }, 5000)
-            router("/account/profile")
+            router("/account");
         } catch(e) {
             setLoading(false);
             setError(e.response.data);
+        } finally {
+            setAction(false);
+            setLoading(false);
         }
     }
 
     return <>
         <div className="SellerCongig-Form-container">
             <div className='restaurant-form'>
-                <Card sx={{ minWidth:550, maxWidth: 550, minHeight: 500 , p: 5 }}>
+                <Card className='restaurant-form-card'>
                     <form onSubmit={handleSubmitButton}>
                         <div class="mb-3">
                             <label for="" class="form-label">Restaurant Name</label>

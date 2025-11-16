@@ -14,7 +14,7 @@ function UserProvider({ children }) {
 
     const userContext = useContext(UserContext);
 
-    let [user, setUser] = useState(null);
+    let [currUser, setCurrUser] = useState(null);
 
     let [isTokenValid, setIsTokenValid] = useState(false);
  
@@ -24,16 +24,15 @@ function UserProvider({ children }) {
             setIsTokenValid(true);
             return res.status;
         } catch(e) {
+            setCurrUser(null);
             setIsTokenValid(false);
             throw e;
         }
     }
 
     useEffect(() => {
-        if(isTokenValid) {
-            getUser();
-        } else {
-            setUser(null);
+        if(!isTokenValid) {
+            setCurrUser(null);
         }
     }, [isTokenValid]);
 
@@ -41,15 +40,15 @@ function UserProvider({ children }) {
         try {
             let res = await client.get(`/public/get-user/${localStorage.getItem("token")}`);
             console.log(res.data)
-            setUser(res.data);
+            setCurrUser(res.data);
         } catch (e) {
-            setUser(null);
+            setCurrUser(null);
             throw e;
         }
     }
 
     const data = {
-        isValidToken, user
+        isValidToken, setCurrUser, currUser
     };
 
     return <UserContext.Provider value={data}>{children}</UserContext.Provider>;

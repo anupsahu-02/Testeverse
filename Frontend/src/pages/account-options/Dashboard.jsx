@@ -21,6 +21,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LocationMap from './LocationMap';
+import { useOutletContext } from 'react-router-dom';
 
 const backendURL = `${import.meta.env.VITE_API_URL}`;
 
@@ -33,10 +34,26 @@ function Dashboard() {
     let [orders, setOrders] = useState([]);
     let [orderDetails, setOrderDetails] = useState(null);
     let [place, setPlace] = useState("");
-
     const [deliverd, setDeliverd] = useState(false);
-
     const [open, setOpen] = React.useState(false);
+
+    let { getUser, currUser, setAction } = useOutletContext();
+    
+    useEffect(() => {
+        getOrders();
+    }, [])
+
+    // let getOrders = () => {
+    //     console.log(currUser.orders)
+    //     setOrders(() => {
+    //         return [...currUser.orders]
+    //     })
+    //     if (currUser.orders.length > 0) {
+    //         setOrderDetails(() => {
+    //             return { ...currUser.orders[0] }
+    //         })
+    //     }
+    // }
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -45,11 +62,6 @@ function Dashboard() {
     const handleClose = () => {
         setOpen(false);
     };
-
-
-    useEffect(() => {
-        getOrders();
-    }, [])
 
     let getOrders = async() => {
         try {
@@ -74,23 +86,19 @@ function Dashboard() {
 
     let handleCheckConform = async() => {
         try {
+            setAction(true);
             let res = await client.put(`/users/orders/${orderDetails.id}/deliver`, null, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             })
         
-            let filtered = orders.filter((order) => order.id !== orderDetails.id);  
-            filtered.unshift({...res.data}) 
-            setOrders(filtered);
-            setOrderDetails(() => {
-                return {...res.data}
-            })
+            await getOrders();
         } catch (e) {
             console.log(e);
+        } finally {
+            setOpen(false);
         }
-
-        setOpen(false);
     }
 
     let handleCheck = () => {
@@ -133,7 +141,7 @@ function Dashboard() {
     return (
         <div className="Dashboard">
             {orders && orders.length < 1 ?
-                <img style={{width: "60%", height: "60vh", margin: "auto", marginTop: "100px"}} src={empty_cart_img} />
+                <img src={empty_cart_img} />
             : <>
                     <div className='orders'>
                         {orders && orders.length > 0 ?
@@ -169,7 +177,7 @@ function Dashboard() {
                                 <div className='details-box'>
                                     <div>
                                         <p style={{ fontSize: "large" }}>Customer</p>
-                                        <p> Name: {orderDetails.customer.username} </p>
+                                        <p> Name: {orderDetails.customer_name} </p>
                                         <p> Address : {orderDetails.address} </p>
                                     </div>
                                     <div>

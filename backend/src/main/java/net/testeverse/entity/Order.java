@@ -1,19 +1,12 @@
 package net.testeverse.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Document(collection = "orders")
 @Data
@@ -41,11 +34,8 @@ public class Order {
 
     private String address;
 
-    @JsonIgnore
-    @DBRef()
-    @JsonManagedReference
-    private User customer;
+    private String customer_name;
 
-    @DBRef
+    @DBRef(lazy = true)
     private Restaurant restaurant;
 }

@@ -32,6 +32,10 @@
   display: none;
 }
 
+.phone-progress-bar {
+  display: none;
+}
+
 @media (max-width: 480px) and (orientation: portrait) {
   .AccountPanel {
    display: none;
@@ -50,5 +54,11 @@
   }
   .drawer-box {
     width: 70vw;
+  }
+  .other-progress-bar {
+    display: none;
+  }
+  .phone-progress-bar {
+    display: inline;
   }
 }

@@ -10,7 +10,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 
 import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
@@ -46,9 +46,7 @@ function ShoppingCart() {
 
     const [addresses, setAddresses] = useState([]);
     const [address, setAddress] = useState('');
-
-    
-        let [isAlert, setIsAlert] = useState(false);
+    let [isAlert, setIsAlert] = useState(false);
 
     useEffect(() => {
         getData();
@@ -56,12 +54,13 @@ function ShoppingCart() {
 
     const FoodCard = styled(Card)(({ theme }) => ({
         position: "relative",
-        width: 250,
         borderRadius: theme.shape.borderRadius * 2,
         overflow: "hidden",
         cursor: "pointer",
+        opacity: 1,
         "&:hover .hover-buttons": {
             opacity: 1,
+            top: 0,
             transform: "translateY(0)",
         },
     }));
@@ -69,6 +68,7 @@ function ShoppingCart() {
     const HoverButtons = styled(Box)(({ theme }) => ({
         position: "absolute",
         bottom: 0,
+        top: -200,
         left: 0,
         width: "100%",
         height: "100%",
@@ -91,6 +91,7 @@ function ShoppingCart() {
                 }
             });
             setIsLoading(false)
+            console.log(response)
             setProducts(() => {
                 return [...response.data]
             });
@@ -244,10 +245,9 @@ function ShoppingCart() {
                                 <FoodCard className="foodCard">
                                     <Box sx={{ position: "relative" }}>
                                         <CardMedia
+                                            className="foodCard-img"
                                             component="img"
                                             image={product.imageUrl}
-                                            alt="Burger"
-                                            sx={{ height: 200, objectFit: "cover" }}
                                         />
                                         <HoverButtons className="hover-buttons">
                                             <Button onClick={() => handleRemoveBtn(product)} variant="contained" color="error">

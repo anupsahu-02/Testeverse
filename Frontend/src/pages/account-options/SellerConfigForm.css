@@ -1,10 +1,29 @@
 .SellerCongig-Form-container {
     height: 100vh;
     width: 75vw;
-    /* background-color: rgb(244, 242, 239); */
+    background-color: rgb(244, 242, 239);
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 50px;
 }
+.restaurant-form-card {
+    width:550px;
+    height: 500px;
+    padding: 50px;
+}
 
+@media (max-width: 480px) and (orientation: portrait) {
+    .SellerCongig-Form-container {
+        width: 100%;
+        display: inline;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+    .restaurant-form-card {
+        width: 100vw;
+        padding: 20px;
+    }
+}

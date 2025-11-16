@@ -12,6 +12,8 @@ import Skeleton from '@mui/material/Skeleton';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
+import { useOutletContext } from 'react-router-dom';
+
 import axios from "axios";
 
 const backendURL = `${import.meta.env.VITE_API_URL}`;
@@ -33,27 +35,39 @@ function MyAddress() {
 
     const [addresses, setAddresses] = useState([]);
 
+    let { getUser, currUser, setAction } = useOutletContext();
+
     useEffect(() => {
         getAddresses();
-    }, [address])
+    }, [currUser])
 
-    let getAddresses = async () => {
-        try {
-            setLoading(true);
-            let res = await client.get("/users/get-address", {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            })
+    let getAddresses = () => {
+        if(currUser && currUser != null) {
             setAddresses(() => {
-                return [...res.data]
+                return [...currUser.address]
             })
-            setLoading(false);
-        } catch(e) {
-            setLoading(false);
-            console.log(e);
+        } else {
+            setLoading(true);
         }
     }
+
+    // let getAddresses = async () => {
+    //     try {
+    //         setLoading(true);
+    //         let res = await client.get("/users/get-address", {
+    //             headers: {
+    //                 Authorization: `Bearer ${localStorage.getItem("token")}`
+    //             }
+    //         })
+    //         setAddresses(() => {
+    //             return [...res.data]
+    //         })
+    //         setLoading(false);
+    //     } catch(e) {
+    //         setLoading(false);
+    //         console.log(e);
+    //     }
+    // }
 
     // Get current location
     const getCurrentLocation = () => {
@@ -82,7 +96,7 @@ function MyAddress() {
 
     let handleAddAddress = async (e)=> {
         e.preventDefault();
-        
+        setAction(true);
         try {
             setLoading(true);
             let res = await client.post("/users/add-address", 
@@ -94,6 +108,12 @@ function MyAddress() {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             })
+
+
+            try {
+                await getUser();
+            } catch(e) { console.log(e) }
+            finally {setAction(false)}
 
             setLoading(false);
             setAddress("");
@@ -107,8 +127,8 @@ function MyAddress() {
 
 
     let handleAddAddressDelete = async(address) => {
-        axios.post
         try {
+            setAction(true);
             let res = await client.delete(`/users/delete-address/${address}`,
                 {
                     headers: {
@@ -119,6 +139,10 @@ function MyAddress() {
             setAddresses(() => {
                 return [...res.data]
             })
+            try {
+                await getUser();
+            } catch (e) { console.log(e) }
+            finally { setAction(false) }
         } catch (e) {
             setError(e.response.data);
             console.log(e);

@@ -6,7 +6,7 @@ function WithAuth(WrappedComponenet) {
     const AuthComponent = (props) => {
         let [isLoading, setIsLoading] = useState(true);
         let [isUserAuthenticated, setisUserAuthenticated] = useState(false); 
-        let { isValidToken } = useContext(UserContext)
+        let { isValidToken, setCurrUser } = useContext(UserContext)
 
         let router = useNavigate(); 
 
@@ -28,6 +28,7 @@ function WithAuth(WrappedComponenet) {
                     if (authenticated) {
                         setisUserAuthenticated(true);
                     } else {
+                        setCurrUser(null);
                         localStorage.clear();
                         router("/auth");
                     }

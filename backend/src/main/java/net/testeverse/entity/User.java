@@ -1,14 +1,12 @@
 package net.testeverse.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mongodb.lang.NonNull;
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
 
-    @Id  // unique key
+    @Id
     private String id;
 
     @NonNull
@@ -41,16 +39,15 @@ public class User {
 
     private boolean seller;
 
-    @DBRef
+    @DBRef(lazy = true)
     private Restaurant restaurant;
 
-    @DBRef
+    @DBRef(lazy = true)
     private List<Product> products = new ArrayList<>();
 
-    @DBRef
+    @DBRef(lazy = true)
     private HashMap<String, Product> carts = new HashMap<>();
 
-    @JsonIgnore
-    @DBRef
+    @DBRef(lazy = true)
     private List<Order> orders = new ArrayList<>();
 }

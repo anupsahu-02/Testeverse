@@ -9,7 +9,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
-import { Button } from '@mui/material';
+import { Button, unstable_toUnitless } from '@mui/material';
+
+import { useOutletContext } from 'react-router-dom';
 
 const backendURL = `${import.meta.env.VITE_API_URL}`;
 
@@ -21,10 +23,27 @@ function OrdersComponent() {
 
     let [orders, setOrders] = useState([]);
     let [orderDetails, setOrderDetails] = useState(null);
+    
+    let {currUser} = useOutletContext();
 
     useEffect(() => {
+        // if(currUser && currUser != null) {
+        //     getOrders();
+        // }
         getOrders();
     }, [])
+
+
+    // let getOrders = () => {
+    //     setOrders(() => {
+    //         return [...currUser.orders]
+    //     })
+    //     if (currUser.orders.length > 0) {
+    //         setOrderDetails(() => {
+    //             return { ...currUser.orders[0] }
+    //         })
+    //     }
+    // }
 
     let getOrders = async() => {
         try {
@@ -58,8 +77,8 @@ function OrdersComponent() {
         <div className="OrdersComponent-container">
             {orders && orders.length <= 0 ? 
                 <>
-                    <img style={{ height: "350px", margin: '90px 50px 50px 350px' }} src={emptyImg} alt="" />
-                    <h4 style={{textAlign: 'center', marginLeft: '250px'}}>Place a Order..</h4>
+                    <img src={emptyImg} alt="" />
+                    <h4>Place a Order..</h4>
                 </>
             : <>
                 <div className='orders-box'>

@@ -49,11 +49,6 @@ public class UserController {
 
     @GetMapping("/get-address")
     public ResponseEntity<?> getAddress() {
-        try {
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.getUser(username);

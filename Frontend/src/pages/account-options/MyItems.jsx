@@ -16,7 +16,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import { useEffect, useState } from 'react';
-
+import { useOutletContext } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 
@@ -31,17 +31,20 @@ const client = axios.create({
 function MyItemsComponent() {
 
     let [products, setProducts] = useState([]);
-
+    let [product, setProduct] = useState(null);
     const [open, setOpen] = useState(false);
 
     let [message, setMessage] = useState("");
     let [error, setError] = useState("");
 
+    let { getUser, currUser, setAction } = useOutletContext();
+
     useEffect(() => {
         getProducts();
-    }, [])
+    }, [currUser])
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (product) => {
+        setProduct(product);
         setOpen(true);
     };
 
@@ -49,38 +52,48 @@ function MyItemsComponent() {
         setOpen(false);
     };
 
-    let getProducts = async () => {
-        try {
-            let response = await client.get("/products/my-products", {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            });
-
+    let getProducts = () => {
+        if(currUser && currUser != null) {
             setProducts(() => {
-                return [...response.data]
+                return [...currUser.products]
             })
-        } catch (e) {
-            console.log(e);
         }
     }
+
+    // let getProducts = async () => {
+    //     try {
+    //         let response = await client.get("/products/my-products", {
+    //             headers: {
+    //                 Authorization: `Bearer ${localStorage.getItem("token")}`
+    //             }
+    //         });
+
+    //         setProducts(() => {
+    //             return [...response.data]
+    //         })
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
 
     let handleUpdataButton = async() => {
         console.log("handleUpdataButton");
     }
 
-    let handleDeleteButton = async(product) => {
-        
+    let handleDeleteButton = async() => {
         try {
+            setAction(true);
             let response = await client.delete(`/products/delete/${product.publicId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             });
-            let filltered = products.filter((p) => p.publicId != product.publicId);
-            setProducts(filltered);
             setOpen(false);
-            setMessage("Product Deleted")
+            setMessage("Product Deleted");
+            try {
+                await getUser();
+            } catch (e) { console.log(e) }
+            finally { setAction(false) }
         } catch (e) {
             setOpen(false);
             setError("Something went wrong!")
@@ -133,7 +146,7 @@ function MyItemsComponent() {
                             </CardContent>
                             <CardActions className='CardActions'>
                                 <Button size="small">Update</Button>
-                                <Button size='small' onClick={handleClickOpen}>
+                                <Button size='small' onClick={() => handleClickOpen(product)}>
                                     Delete
                                 </Button>
                             </CardActions>
@@ -146,11 +159,11 @@ function MyItemsComponent() {
                                         aria-describedby="alert-dialog-description"
                                     >
                                         <DialogTitle style={{width: "400px"}}>
-                                            Do You Want to Delete?                           
+                                        Do You Want to Delete?                          
                                         </DialogTitle>
                                         <DialogActions>
                                             <Button onClick={handleClose}>Cancel</Button>
-                                            <Button onClick={(() => handleDeleteButton(product))} autoFocus>
+                                            <Button onClick={(handleDeleteButton)} autoFocus>
                                                 Delete
                                             </Button>
                                         </DialogActions>
