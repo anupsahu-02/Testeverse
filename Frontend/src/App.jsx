@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Home from './pages/Home'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
@@ -17,8 +17,17 @@ import UserProvider from './contexts/UserContext'
 
 import SellerConfigForm from './pages/account-options/SellerConfigForm'
 import Dashboard from './pages/account-options/Dashboard'
+import Order from './pages/Order'
 
 function App() {
+    let [isPhone, setIsPhone] = useState(false);
+    useEffect(() => {
+        if(window.innerWidth <= 480) {
+            setIsPhone(true);
+        } else {
+            setIsPhone(false)
+        }
+    }, [])
 
   return (
     <>
@@ -27,6 +36,7 @@ function App() {
                 <Routes>
                       <Route path='/' element={<Home />} />
                       <Route path='/my-cart' element={<ShoppingCart />} />
+                      {isPhone ? <Route path='/new-order' element={<Order />} /> : <></>}
                       <Route path='/auth' element={<Auth />} />
                       <Route path='account' element={<Account />} >
                           <Route path='/account/profile' element={<UserProfile />} />

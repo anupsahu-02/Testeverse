@@ -29,6 +29,8 @@ import Select from '@mui/material/Select';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+import {useNavigate} from 'react-router-dom'
+
 const backendURL = `${import.meta.env.VITE_API_URL}`;
 
 const client = axios.create({
@@ -47,6 +49,8 @@ function ShoppingCart() {
     const [addresses, setAddresses] = useState([]);
     const [address, setAddress] = useState('');
     let [isAlert, setIsAlert] = useState(false);
+
+    let router = useNavigate();
 
     useEffect(() => {
         getData();
@@ -206,6 +210,11 @@ function ShoppingCart() {
     }
 
     let handleOrderOpen = (product) => {
+        if (window.innerWidth <= 480) {
+            router("/new-order", {
+                state: product
+            })
+        } 
         setSelectedProducts(product);
         getAddress();
         setOpenOrder(true);

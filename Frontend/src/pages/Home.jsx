@@ -35,12 +35,17 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { UserContext } from "../contexts/UserContext";
 
 function Home() {
 
     let itmes = [];
 
+    let { handleOrderPlace } = useContext(UserContext);
+
     let [data, setData] = useState([]);
+
+    let [error, setError] = useState("");
 
     let [isLoading, setIsLoading] = useState(true);
 
@@ -168,26 +173,12 @@ function Home() {
         );
     }
 
-    let handleOrderPlace = async(product) => {
-        if(address.length <= 0) return;
+    let handleOrderPlaceInk = async(product) => {
         try {
-            let res = client.post("/users/orders/add-order", 
-                {
-                    name: product.name,
-                    productId: product.id,
-                    totalAmount: product.price,
-                    imageUrl: product.imageUrl,
-                    address: address
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    },
-                }
-            )
+            await handleOrderPlace(product, address);
             setOpenOrder(false);
-        } catch(e) {
-            console.log(e);
+        } catch(e) { 
+            setError(e);
         }
     }
 
@@ -219,10 +210,10 @@ function Home() {
                                             <FormControl fullWidth>
                                                 <InputLabel id="">Address</InputLabel>
                                                 <Select
+
                                                     value={address}
                                                     label="Address"
                                                     type="text"
-                                                    required
                                                     onChange={(e) => setAddress(e.target.value)}
                                                 >
                                                     {addresses.map((add, idx) => 
@@ -230,10 +221,11 @@ function Home() {
                                                     )}
                                                 </Select>
                                             </FormControl>
+                                            <p style={{color: "red"}}>{error}</p>
                                         </Box>
                                     </CardContent>
                                     <CardActions>
-                                        <Button onClick={() => handleOrderPlace(selectedProduct)}>ORDER</Button>
+                                        <Button onClick={() => handleOrderPlaceInk(selectedProduct)}>ORDER</Button>
                                     </CardActions>
                                 </Card>
                             </DialogContent>
@@ -258,9 +250,15 @@ function Home() {
     }
 
     let handleOrderOpen = (product) => {
+        setError("");
         if (!localStorage.getItem("token")) {
             setIsAlert(true);
         } else {
+            if(window.innerWidth <= 480) {
+                router("/new-order", {
+                    state : product
+                })
+            } 
             setIsAlert(false);
             setSelectedProducts(product)
             getAddress();

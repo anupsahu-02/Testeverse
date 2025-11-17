@@ -47,8 +47,30 @@ function UserProvider({ children }) {
         }
     }
 
+    const handleOrderPlace = async (product, address) => {
+        if (address.length <= 0) throw "Please choose your address!";
+        try {
+            let res = await client.post("/users/orders/add-order",
+                {
+                    name: product.name,
+                    productId: product.id,
+                    totalAmount: product.price,
+                    imageUrl: product.imageUrl,
+                    address: address
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    },
+                }
+            )
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     const data = {
-        isValidToken, setCurrUser, currUser
+        isValidToken, setCurrUser, currUser, handleOrderPlace
     };
 
     return <UserContext.Provider value={data}>{children}</UserContext.Provider>;
