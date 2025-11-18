@@ -18,6 +18,8 @@ import UserProvider from './contexts/UserContext'
 import SellerConfigForm from './pages/account-options/SellerConfigForm'
 import Dashboard from './pages/account-options/Dashboard'
 import Order from './pages/Order'
+import OrderDetails from './pages/account-options/OrderDetails'
+import OrderDetDashboard from './pages/account-options/OrderDetDashboard'
 
 function App() {
     let [isPhone, setIsPhone] = useState(false);
@@ -37,6 +39,8 @@ function App() {
                       <Route path='/' element={<Home />} />
                       <Route path='/my-cart' element={<ShoppingCart />} />
                       {isPhone ? <Route path='/new-order' element={<Order />} /> : <></>}
+                      {isPhone ? <Route path='/account/orders/order/info' element={<OrderDetails />} /> : <></>}
+                      {isPhone ? <Route path='/account/dashboard/order/info' element={<OrderDetDashboard />} /> : <></>}
                       <Route path='/auth' element={<Auth />} />
                       <Route path='account' element={<Account />} >
                           <Route path='/account/profile' element={<UserProfile />} />

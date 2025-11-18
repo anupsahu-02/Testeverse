@@ -72,7 +72,7 @@ export default function LocationMap({ locationName }) {
                     <p style={{ fontSize: "large" }}>{error}</p>
                         :
                         <>
-                        Showing: <b>{place}</b>
+                        <b>{place}</b>
                             <MapContainer
                                 center={coords}
                                 zoom={1}

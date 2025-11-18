@@ -22,6 +22,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LocationMap from './LocationMap';
 import { useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const backendURL = `${import.meta.env.VITE_API_URL}`;
 
@@ -39,21 +40,11 @@ function Dashboard() {
 
     let { getUser, currUser, setAction } = useOutletContext();
     
+    let router = useNavigate();
+
     useEffect(() => {
         getOrders();
     }, [])
-
-    // let getOrders = () => {
-    //     console.log(currUser.orders)
-    //     setOrders(() => {
-    //         return [...currUser.orders]
-    //     })
-    //     if (currUser.orders.length > 0) {
-    //         setOrderDetails(() => {
-    //             return { ...currUser.orders[0] }
-    //         })
-    //     }
-    // }
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -73,7 +64,7 @@ function Dashboard() {
             setOrders(() => {
                 return [...res.data]
             })
-            if(res.data.length > 0) {
+            if(res.data.length > 0 && window.innerWidth > 480) {
                 setOrderDetails(() => {
                     return { ...res.data[0] }
                 });
@@ -130,6 +121,11 @@ function Dashboard() {
     }
 
     let handleCardClick = (order) => {
+        if (window.innerWidth <= 480) {
+            router("/account/dashboard/order/info", {
+                state: order
+            })
+        }
         setOrderDetails(() => {
             return {...order}
         })
@@ -146,7 +142,7 @@ function Dashboard() {
                     <div className='orders'>
                         {orders && orders.length > 0 ?
                             orders.map((order) =>
-                                <Card className='user-order-card' onClick={() => handleCardClick(order)} style={{ backgroundColor: orderDetails.id == order.id ? "orange" : "" }} >
+                                <Card className='user-order-card' onClick={() => handleCardClick(order)} style={{ backgroundColor: orderDetails && orderDetails.id == order.id ? "orange" : "" }} >
                                     <CardContent style={{ display: "flex", gap: "10px" }}>
                                         <CardMedia
                                             className='user-order-card-img'
