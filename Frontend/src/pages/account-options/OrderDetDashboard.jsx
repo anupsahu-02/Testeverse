@@ -30,7 +30,11 @@ function OrderDetDashboard() {
     const [deliverd, setDeliverd] = useState(false);
     const [open, setOpen] = useState(false);
     let place = state.address;
-    console.log(state)
+
+    const goBack = () => {
+        router(-1);
+    };
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -87,7 +91,7 @@ function OrderDetDashboard() {
     return <>
         <Navbar />
         <div>
-            <IconButton onClick={() => router("/account/dashboard")}>
+            <IconButton onClick={goBack}>
                 <ArrowBackIcon />
             </IconButton>
             <hr />

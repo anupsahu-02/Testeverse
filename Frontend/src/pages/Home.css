@@ -22,6 +22,12 @@
     height: 330px;
 }
 
+.loadingSkeletonHome {
+    min-width: 330px;
+    max-width: 330px;
+    height: 200px !important;
+}
+
 .product-card-img {
     height: 200px;
 }
@@ -62,5 +68,9 @@
     .order-dialog {
         margin: 0;
         padding: 0;
+    }
+    .loadingSkeletonHome {
+        min-width: 90vw;
+        max-width: 90vw;
     }
 }

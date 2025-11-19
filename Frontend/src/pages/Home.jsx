@@ -240,10 +240,10 @@ function Home() {
     let showLoading = ()=> {
        return (
            <Grid>
-               <Skeleton variant="rectangular" sx={{ minWidth: 390, maxWidth: 350, height: 150 }} />
+               <Skeleton className="loadingSkeletonHome" variant="rectangular" />
                <Box sx={{ pt: 0.5 }}>
                    <Skeleton />
-                   <Skeleton width="250px" />
+                   <Skeleton width="250px" height={70} />
                </Box>
            </Grid>
        )
@@ -296,7 +296,7 @@ function Home() {
                                         <b>{product.name}</b>
                                     </Typography>
                                     <Typography sx={{ textAlign: "end" }}>
-                                        {product.restaurant.restaurant_name}
+                                        <span style={{fontFamily: "monospace", color: "gray"}}>{product.restaurant.restaurant_name}</span>
                                     </Typography>
                                 </div>
                                 <Typography variant="p" component="p" mt="1px" sx={{ color: 'text.secondary', p:"0" }}>

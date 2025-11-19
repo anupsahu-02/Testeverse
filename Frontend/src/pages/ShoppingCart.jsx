@@ -269,7 +269,7 @@ function ShoppingCart() {
                                     </Box>
 
                                     <CardContent sx={{ bgcolor: "#fafafa" }}>
-                                        <Typography variant="h6" fontWeight={600}>
+                                        <Typography variant="p" fontWeight={600}>
                                             {product.name}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">

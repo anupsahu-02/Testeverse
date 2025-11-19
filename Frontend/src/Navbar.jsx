@@ -44,8 +44,8 @@ function Navbar() {
     return ( 
        <div className="Nav-container">
             <div className="left-nav">
-                <span className="testeverse" onClick={(() => router("/"))}>
-                    Testeverse
+                <span className="testeverse">
+                    <p onClick={() => router("/")}>Testeverse</p>
                 </span>
             </div>
             <div className="search-box">

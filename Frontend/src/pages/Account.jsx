@@ -52,7 +52,7 @@ function Account() {
     let [action, setAction] = useState(false);
 
     useEffect(() => {
-        if(!currUser  || action) {
+        if(!currUser || action) {
             const timer = setInterval(() => {
                 setProgress((oldProgress) => {
                     if (oldProgress === 100) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './Dashboard.css'
 import axios from 'axios';
 
@@ -8,12 +8,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
-import { Button, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 
 import * as React from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 import ToggleButton from '@mui/material/ToggleButton';
-import { Handler } from 'leaflet';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -21,8 +20,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LocationMap from './LocationMap';
-import { useOutletContext } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useOutletContext } from 'react-router-dom';
+
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 const backendURL = `${import.meta.env.VITE_API_URL}`;
 
@@ -37,14 +38,36 @@ function Dashboard() {
     let [place, setPlace] = useState("");
     const [deliverd, setDeliverd] = useState(false);
     const [open, setOpen] = React.useState(false);
+    let [fetchingOrders, setFetchingOrders] = useState(false);
 
     let { getUser, currUser, setAction } = useOutletContext();
     
     let router = useNavigate();
+    const location = useLocation();
+    
+    // REF for the scrollable container (the div that actually scrolls)
+    const listRef = useRef(null);
 
     useEffect(() => {
         getOrders();
     }, [])
+
+    // Restore scroll AFTER orders are loaded (use orders dependency)
+    useEffect(() => {
+        // Only try restore if listRef exists and orders are rendered
+        const saved = sessionStorage.getItem('ordersScroll');
+        if (saved && listRef.current) {
+            // convert to number and set
+            listRef.current.scrollTop = Number(saved);
+            // remove after restoring so it doesn't persist forever
+            sessionStorage.removeItem('ordersScroll');
+        }
+
+        // Also support location.state if you still have it (optional compatibility)
+        if (location.state?.savedScroll && listRef.current) {
+            listRef.current.scrollTop = Number(location.state.savedScroll);
+        }
+    }, [orders]); // run after orders loaded / changed
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -56,6 +79,7 @@ function Dashboard() {
 
     let getOrders = async() => {
         try {
+            setFetchingOrders(true);
             let res = await client.get("/users/restaurant/orders", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -72,6 +96,8 @@ function Dashboard() {
             }
         } catch(e) {
             console.log(e);
+        } finally {
+            setFetchingOrders(false);
         }
     }
 
@@ -121,25 +147,54 @@ function Dashboard() {
     }
 
     let handleCardClick = (order) => {
+        // Get scrollTop of scrollable container (not window)
+        const scrollTop = listRef.current ? listRef.current.scrollTop : 0;
         if (window.innerWidth <= 480) {
+            sessionStorage.setItem("comingBack", "false");
+            // Save to sessionStorage before navigating forward
+            sessionStorage.setItem('ordersScroll', String(scrollTop));
+
             router("/account/dashboard/order/info", {
                 state: order
             })
+            return;
         }
+
         setOrderDetails(() => {
             return {...order}
         })
         setPlace(order.address);
     }
 
+    let SkeletonsView = () => {
+        return (
+            <Stack className='ordersSkeletons' spacing={1}>
+                <Skeleton variant="rounded" style={{ width: "100%", height: "70px" }} />
+                <Skeleton variant="rounded" style={{ width: "100%", height: "70px" }} />
+                <Skeleton variant="rounded" style={{ width: "100%", height: "70px" }} />
+                <Skeleton variant="rounded" style={{ width: "100%", height: "70px" }} />
+                <Skeleton variant="rounded" style={{ width: "100%", height: "70px" }} />
+                <Skeleton variant="rounded" style={{ width: "100%", height: "70px" }} />
+                <Skeleton variant="rounded" style={{ width: "100%", height: "70px" }} />
+                <Skeleton variant="rounded" style={{ width: "100%", height: "70px" }} />
+                <Skeleton variant="rounded" style={{ width: "100%", height: "70px" }} />
+            </Stack>
+        );
+    }
+
     let bgColor = "red";
 
     return (
         <div className="Dashboard">
-            {orders && orders.length < 1 ?
+            {!fetchingOrders && orders && orders.length <= 0 ?
                 <img src={empty_cart_img} />
             : <>
-                    <div className='orders'>
+                    <div className='orders' ref={listRef} style={{ overflowY: 'auto' }}>
+                        {fetchingOrders ?
+                            <>
+                                <SkeletonsView />
+                            </>
+                            : <></>}
                         {orders && orders.length > 0 ?
                             orders.map((order) =>
                                 <Card className='user-order-card' onClick={() => handleCardClick(order)} style={{ backgroundColor: orderDetails && orderDetails.id == order.id ? "orange" : "" }} >
