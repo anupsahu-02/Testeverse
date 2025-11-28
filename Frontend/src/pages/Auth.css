@@ -12,6 +12,25 @@
     justify-content: center;
 }
 
+.googleOptionBox {
+    height: 40px;
+    width: 35vw;
+    text-align: center;
+    margin-left: 30px;
+    border: 1px solid rgba(153, 148, 141, 0.655);  
+    cursor: pointer;
+}
+
+.googleOptionBox:hover {
+    border: 1px solid rgb(204, 197, 187);   
+    box-shadow: 1px 1px gray;
+    background-color: rgb(255, 255, 255);
+}
+
+.googleOptionBox p {
+    padding-top: 5px;
+}
+
 @media (max-width: 480px) and (orientation: portrait) {
     .form-div {
         margin: auto;
@@ -26,5 +45,9 @@
     }
     .auth-inp {
         padding: 0 !important;
+    }
+    .googleOptionBox {
+        width: 90vw;
+        margin-left: 20px;
     }
 }

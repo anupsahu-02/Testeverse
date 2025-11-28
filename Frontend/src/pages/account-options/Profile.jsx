@@ -53,7 +53,7 @@ function ProfileComponent() {
                         Username
                     </Typography>
                     <Typography variant="p" component="p" mt="1px" sx={{ color: 'text.secondary' }}>
-                        <b>{user.username}</b>
+                        <b>{user.username.substring(0, user.username.indexOf("@gmail.com") > -1 ? user.username.indexOf("@gmail.com") : user.username.length)}</b>
                     </Typography>
                 </CardContent>
             </Card>

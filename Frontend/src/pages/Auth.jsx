@@ -1,5 +1,5 @@
 import "./Auth.css"
-
+import googlePng from '../assets/Google__G__logo.svg.png'
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -86,6 +86,12 @@ function Auth() {
         setEmail("");
         setError("");
     }, [formState])
+
+    let handleGoogleAuth = async () => {
+        let res = await client.get("/auth/google/url");
+        let url = res.data.url;
+        window.location.href = url;
+    }
 
     return <>
         <Navbar />
@@ -178,8 +184,13 @@ function Auth() {
 
                     </div>
                 </form>
+                <hr />
+                <br />
+                <div onClick={handleGoogleAuth} className="googleOptionBox">
+                    <p style={{textAlign: "center"}}><img style={{height: "20px", marginRight: "5px"}} src={googlePng}/>{formState == 0 ? "Sign in with Google" : "Sign up with Google"}</p>
+                </div>
             </div>
-
+            
             <Snackbar
                 autoHideDuration={2}
                 open={open}

@@ -20,6 +20,7 @@ import Dashboard from './pages/account-options/Dashboard'
 import Order from './pages/Order'
 import OrderDetails from './pages/account-options/OrderDetails'
 import OrderDetDashboard from './pages/account-options/OrderDetDashboard'
+import GoogleSuccess from './pages/GoogleSuccess'
 
 function App() {
     let [isPhone, setIsPhone] = useState(false);
@@ -42,6 +43,7 @@ function App() {
                       {isPhone ? <Route path='/account/orders/order/info' element={<OrderDetails />} /> : <></>}
                       {isPhone ? <Route path='/account/dashboard/order/info' element={<OrderDetDashboard />} /> : <></>}
                       <Route path='/auth' element={<Auth />} />
+                      <Route path="/google-success" element={<GoogleSuccess />} />
                       <Route path='account' element={<Account />} >
                           <Route path='/account/profile' element={<UserProfile />} />
                           <Route path='/account/orders' element={<UserOrders />} />
