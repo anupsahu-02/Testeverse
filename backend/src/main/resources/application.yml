@@ -4,6 +4,15 @@ spring:
       uri: ${MONGODB_URL}
       auto-index-creation: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-url: ${REDIRECT_URL}
+
   main:
     allow:
       circular-reference: true
